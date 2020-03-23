@@ -11,8 +11,9 @@ import java.sql.Timestamp;
 import java.lang.reflect.Field;
 
 /**
- * @author Zheng Jie
- * @Date 2019年10月24日20:46:32
+ * @author luke wang
+ * @Date 2020年3月23日10:00:03
+ * @Remark 赤壁悠易科技有限公司
  */
 @Getter
 @Setter
@@ -21,6 +22,7 @@ public class BaseEntity implements Serializable {
 
     /** 删除标识 **/
     @Column(name = "is_delete", columnDefinition = "bit default 0")
+
     private Boolean isDelete = false;
 
     @Column(name = "create_time")

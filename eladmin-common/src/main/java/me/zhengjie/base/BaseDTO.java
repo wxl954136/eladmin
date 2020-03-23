@@ -6,8 +6,8 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
- * @author Zheng Jie
- * @Date 2019年10月24日20:48:53
+ * @author luke wang
+ * @Date 2020年3月23日10:00:03
  */
 @Getter
 @Setter
