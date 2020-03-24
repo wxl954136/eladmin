@@ -99,6 +99,13 @@ public class AuthController {
             put("token", properties.getTokenStartWith() + token);
             put("user", jwtUser);
         }};
+        /*
+        System.out.println("********************************************");
+        System.out.println("1:getTokenStartWith：  =" + properties.getTokenStartWith());
+        System.out.println("2:token：  =" + token);
+        System.out.println(authInfo);
+         */
+
         if(singleLogin){
             //踢掉之前已经登录的token
             onlineUserService.checkLoginOnUser(authUser.getUsername(),token);
