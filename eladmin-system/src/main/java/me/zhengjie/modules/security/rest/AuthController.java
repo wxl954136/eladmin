@@ -104,6 +104,8 @@ public class AuthController {
         System.out.println("1:getTokenStartWith：  =" + properties.getTokenStartWith());
         System.out.println("2:token：  =" + token);
         System.out.println(authInfo);
+        //luke
+        //Authorization:properties.getTokenStartWith() + token  接口调试时的
          */
 
         if(singleLogin){
