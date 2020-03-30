@@ -174,7 +174,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         }
         return "";
     }
-
+    //获取用户浏览器类型 lukeWang
     public static String getBrowser(HttpServletRequest request){
         UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
         Browser browser = userAgent.getBrowser();

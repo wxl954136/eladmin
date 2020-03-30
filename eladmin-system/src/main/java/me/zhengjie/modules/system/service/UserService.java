@@ -47,7 +47,16 @@ public interface UserService {
      * @param userName /
      * @return /
      */
+
     UserDto findByName(String userName);
+
+    /**
+     * 根据用户名及企业代码查询
+     * @param userName /
+     * @param topCompanyCode
+     * @return /
+     */
+    UserDto findByNameCode(String userName,String topCompanyCode);
 
     /**
      * 修改密码

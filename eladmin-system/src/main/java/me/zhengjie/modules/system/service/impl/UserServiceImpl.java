@@ -1,5 +1,6 @@
 package me.zhengjie.modules.system.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import me.zhengjie.modules.system.domain.User;
 import me.zhengjie.exception.EntityExistException;
 import me.zhengjie.exception.EntityNotFoundException;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
  * @author Zheng Jie
  * @date 2018-11-23
  */
+@Slf4j
 @Service
 @CacheConfig(cacheNames = "user")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
@@ -147,12 +149,37 @@ public class UserServiceImpl implements UserService {
     @Override
     @Cacheable(key = "'loadUserByUsername:'+#p0")
     public UserDto findByName(String userName) {
+        System.out.println("===81====");
+
         User user;
         if(ValidationUtil.isEmail(userName)){
             user = userRepository.findByEmail(userName);
         } else {
             user = userRepository.findByUsername(userName);
         }
+        if (user == null) {
+            throw new EntityNotFoundException(User.class, "name", userName);
+        } else {
+            return userMapper.toDto(user);
+        }
+    }
+
+    //lukeWang
+    @Override
+    //lukeWang最好不要使用缓存
+    //@Cacheable(key = "'loadUserByUsernameAndTopCompanyCode:'+#p0")
+    public UserDto findByNameCode(String userName,String topCompanyCode) {
+        User user;
+        user = userRepository.findByUsernameAndTopCompanyCode(userName,topCompanyCode);
+       // user = userRepository.findByUsername(userName);
+        /*
+        //仅使用username + topCompanyCode
+        if(ValidationUtil.isEmail(userName)){
+            user = userRepository.findByEmail(userName);
+        } else {
+            user = userRepository.findByUsername(userName);
+        }
+         */
         if (user == null) {
             throw new EntityNotFoundException(User.class, "name", userName);
         } else {

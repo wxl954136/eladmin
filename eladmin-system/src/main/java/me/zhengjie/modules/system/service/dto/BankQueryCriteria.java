@@ -18,6 +18,8 @@ public class BankQueryCriteria {
     @Query(type = Query.Type.INNER_LIKE)
     private String name;
 
+    @Query(type = Query.Type.INNER_LIKE)
+    private String topCompanyCode;
     @Query
     private Boolean enabled;
 

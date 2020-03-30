@@ -2,6 +2,7 @@ package me.zhengjie.modules.system.service.impl;
 
 
 
+import lombok.extern.slf4j.Slf4j;
 import me.zhengjie.modules.system.domain.Bank;
 import me.zhengjie.modules.system.repository.BankRepository;
 import me.zhengjie.modules.system.service.BankService;
@@ -30,6 +31,7 @@ import java.util.*;
 * @author Zheng Jie
 * @date 2019-03-29
 */
+@Slf4j
 @Service
 @CacheConfig(cacheNames = "bank")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
@@ -62,6 +64,7 @@ public class BankServiceImpl implements BankService {
 @Override
 @Cacheable
 public Map<String, Object> queryAll(BankQueryCriteria bank, Pageable pageable){
+
     Page<Bank> page = bankRepository.findAll((root, query, cb) -> QueryHelp.getPredicate(root, bank, cb), pageable);
     return PageUtil.toPage(page.map(bankMapper::toDto));
 }

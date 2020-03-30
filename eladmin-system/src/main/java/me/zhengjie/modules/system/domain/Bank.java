@@ -38,6 +38,10 @@ public class Bank implements Serializable {
     @NotNull
     private Boolean enabled;
 
+    @Column(name = "top_company_code",nullable = false)
+    @NotBlank
+    private String topCompanyCode;
+
     @Column(name = "create_time")
     @CreationTimestamp
     private Timestamp createTime;

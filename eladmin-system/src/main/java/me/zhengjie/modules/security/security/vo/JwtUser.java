@@ -11,8 +11,8 @@ import java.util.Date;
 import java.util.stream.Collectors;
 
 /**
- * @author Zheng Jie
- * @date 2018-11-23
+ * @author lukeWang
+ * @date 2020-03-30
  */
 @Getter
 @AllArgsConstructor
@@ -34,10 +34,14 @@ public class JwtUser implements UserDetails {
     private final String email;
 
     private final String phone;
-
+    private final String topCompanyCode;
     private final String dept;
 
+
+
     private final String job;
+
+
 
     @JsonIgnore
     private final Collection<GrantedAuthority> authorities;

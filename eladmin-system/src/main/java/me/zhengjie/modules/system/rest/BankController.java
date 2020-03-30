@@ -2,6 +2,7 @@ package me.zhengjie.modules.system.rest;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import me.zhengjie.aop.log.Log;
 import me.zhengjie.config.DataScope;
 import me.zhengjie.exception.BadRequestException;
@@ -25,6 +26,7 @@ import java.util.Set;
 * @author Zheng Jie
 * @date 2019-03-29
 */
+@Slf4j
 @Api(tags = "系统：银行管理")
 @RestController
 @RequestMapping("/api/bank")

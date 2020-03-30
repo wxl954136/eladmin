@@ -46,6 +46,7 @@ public class AuthController {
 
     @Value("${loginCode.expiration}")
     private Long expiration;
+    //config/application.yml文件中取值
     @Value("${rsa.private_key}")
     private String privateKey;
     @Value("${single.login:false}")
@@ -84,11 +85,14 @@ public class AuthController {
         if (StringUtils.isBlank(authUser.getCode()) || !authUser.getCode().equalsIgnoreCase(code)) {
             throw new BadRequestException("验证码错误");
         }
+
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(authUser.getUsername(), password);
+                new UsernamePasswordAuthenticationToken(authUser.getUsername() + "," +authUser.getTopcompanycode() , password  );
+
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
         // 生成令牌
         String token = tokenProvider.createToken(authentication);
         final JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
@@ -99,15 +103,6 @@ public class AuthController {
             put("token", properties.getTokenStartWith() + token);
             put("user", jwtUser);
         }};
-        /*
-        System.out.println("********************************************");
-        System.out.println("1:getTokenStartWith：  =" + properties.getTokenStartWith());
-        System.out.println("2:token：  =" + token);
-        System.out.println(authInfo);
-        //luke
-        //Authorization:properties.getTokenStartWith() + token  接口调试时的
-         */
-
         if(singleLogin){
             //踢掉之前已经登录的token
             onlineUserService.checkLoginOnUser(authUser.getUsername(),token);

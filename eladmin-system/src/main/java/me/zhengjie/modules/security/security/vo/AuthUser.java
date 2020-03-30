@@ -12,6 +12,8 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 public class AuthUser {
+    @NotBlank
+    private String topcompanycode;
 
     @NotBlank
     private String username;
@@ -25,6 +27,6 @@ public class AuthUser {
 
     @Override
     public String toString() {
-        return "{username=" + username  + ", password= ******}";
+        return "{topcompanycode=" + topcompanycode + ",username=" + username  + ", password= ******}";
     }
 }

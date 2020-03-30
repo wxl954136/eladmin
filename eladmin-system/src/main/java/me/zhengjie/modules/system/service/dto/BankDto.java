@@ -26,6 +26,8 @@ public class BankDto implements Serializable {
 
     private Timestamp createTime;
 
+    private String topCompanyCode;
+
     public BankDto(String name, Boolean enabled) {
         this.name = name;
         this.enabled = enabled;

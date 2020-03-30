@@ -3,6 +3,8 @@ package me.zhengjie.modules.system.service.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -48,4 +50,5 @@ public class UserDto implements Serializable {
     private Long deptId;
 
     private Timestamp createTime;
+    private String topCompanyCode;
 }

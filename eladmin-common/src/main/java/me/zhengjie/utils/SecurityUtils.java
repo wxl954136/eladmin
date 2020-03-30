@@ -31,4 +31,18 @@ public class SecurityUtils {
         Object obj = getUserDetails();
         return new JSONObject(obj).get("username", String.class);
     }
+    /**
+     * lukeWang:
+     * 获取用户完整的登录信息统用户名称 JwtUser
+     * @return 系统用户名称
+     */
+    public static Object getUserLoginInfo(){
+        Object  object;
+        try {
+            object = (Object) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        } catch (Exception e) {
+            throw new BadRequestException(HttpStatus.UNAUTHORIZED, "登录状态过期");
+        }
+        return object;
+    }
 }

@@ -30,7 +30,8 @@ public class User implements Serializable {
     private Long id;
 
     @NotBlank
-    @Column(unique = true)
+
+    //@Column(unique = true)  //lukeWang，暂时取消，topcompanycode + username
     private String username;
 
     /** 用户昵称 */
@@ -55,6 +56,11 @@ public class User implements Serializable {
     private Boolean enabled;
 
     private String password;
+
+
+    @NotNull
+    @Column(name = "top_company_code")
+    private String topCompanyCode;
 
     @Column(name = "create_time")
     @CreationTimestamp
