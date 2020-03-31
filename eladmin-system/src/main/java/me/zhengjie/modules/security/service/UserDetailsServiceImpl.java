@@ -33,11 +33,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username){
-        log.info("lukeWang:loadUserByUsername  1--");
         String obj_user[] = username.split(",");
         UserDto user = userService.findByNameCode(obj_user[0],obj_user[1]);
-        //UserDto user = userService.findByName(username);
-        log.info("lukeWang:loadUserByUsername 2--" + user.getTopCompanyCode());
         if (user == null) {
             throw new BadRequestException("账号不存在");
         } else {

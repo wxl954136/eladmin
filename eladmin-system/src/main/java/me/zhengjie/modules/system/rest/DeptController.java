@@ -1,28 +1,28 @@
 package me.zhengjie.modules.system.rest;
 
 import cn.hutool.core.collection.CollectionUtil;
-import io.jsonwebtoken.Jwt;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import me.zhengjie.aop.log.Log;
 import me.zhengjie.config.DataScope;
 import me.zhengjie.exception.BadRequestException;
+import me.zhengjie.modules.security.config.SecurityProperties;
 import me.zhengjie.modules.security.security.vo.JwtUser;
 import me.zhengjie.modules.system.domain.Dept;
-import me.zhengjie.modules.system.domain.User;
 import me.zhengjie.modules.system.service.DeptService;
 import me.zhengjie.modules.system.service.dto.DeptDto;
 import me.zhengjie.modules.system.service.dto.DeptQueryCriteria;
-import me.zhengjie.utils.SecurityUtils;
+import me.zhengjie.utils.RedisUtils;
 import me.zhengjie.utils.ThrowableUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashSet;
@@ -44,6 +44,21 @@ public class DeptController {
     private final DataScope dataScope;
 
     private static final String ENTITY_NAME = "dept";
+    @Autowired
+    private  RedisUtils redisUtils;
+    //因为下面有定义，所以不需要全局定义
+    //全局注解，相当于 HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+    @Autowired
+    private HttpServletRequest request;
+
+
+/*
+不明白为什么response不可以自动装配
+    @Autowired
+    private HttpServletResponse response;
+ */
+
+
 
     public DeptController(DeptService deptService, DataScope dataScope) {
         this.deptService = deptService;
@@ -64,11 +79,11 @@ public class DeptController {
     @PreAuthorize("@el.check('user:list','dept:list')")
     public ResponseEntity<Object> getDepts(DeptQueryCriteria criteria){
         // 数据权限
-       Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        //final JwtUser jwtUser = (JwtUser)principal;
-        log.info(principal.getClass() + "-********11-"   );
-        //lukeWang
-     //   SecurityUtils.getUserDetails()
+        String auth = request.getHeader("Authorization");
+
+        JwtUser jwtUser = (JwtUser)redisUtils.get(auth);
+        log.info("2===="  + jwtUser.getEmail() + "--" + jwtUser.getTopCompanyCode());
+       //lukeWang
         criteria.setIds(dataScope.getDeptIds());
         List<DeptDto> deptDtos = deptService.queryAll(criteria);
         return new ResponseEntity<>(deptService.buildTree(deptDtos),HttpStatus.OK);

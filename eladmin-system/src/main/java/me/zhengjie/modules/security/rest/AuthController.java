@@ -95,6 +95,7 @@ public class AuthController {
 
         // 生成令牌
         String token = tokenProvider.createToken(authentication);
+
         final JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
         // 保存在线信息
         onlineUserService.save(jwtUser, token, request);
@@ -103,6 +104,13 @@ public class AuthController {
             put("token", properties.getTokenStartWith() + token);
             put("user", jwtUser);
         }};
+        //lukeWang：将用户登录信息存入Redis缓存
+        //properties.getTokenStartWith() + token
+        redisUtils.set(properties.getTokenStartWith() + token,jwtUser);
+
+
+
+
         if(singleLogin){
             //踢掉之前已经登录的token
             onlineUserService.checkLoginOnUser(authUser.getUsername(),token);
