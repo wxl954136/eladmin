@@ -22,7 +22,6 @@ public class BaseEntity implements Serializable {
 
     /** 删除标识 **/
     @Column(name = "is_delete", columnDefinition = "bit default 0")
-
     private Boolean isDelete = false;
 
     @Column(name = "create_time")

@@ -1,5 +1,6 @@
 package me.zhengjie.modules.system.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.service.dto.DeptDto;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 * @author Zheng Jie
 * @date 2019-03-25
 */
+@Slf4j
 @Service
 @CacheConfig(cacheNames = "dept")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
@@ -45,7 +47,6 @@ public class DeptServiceImpl implements DeptService {
     public List<DeptDto> queryAll(DeptQueryCriteria criteria) {
         return deptMapper.toDto(deptRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
-
     @Override
     @Cacheable(key = "#p0")
     public DeptDto findById(Long id) {

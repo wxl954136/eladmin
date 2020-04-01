@@ -45,10 +45,11 @@ public class UserDto implements Serializable {
     @ApiModelProperty(hidden = true)
     private JobSmallDto job;
 
-    private DeptSmallDto dept;
 
+    private DeptSmallDto dept;
     private Long deptId;
 
     private Timestamp createTime;
+
     private String topCompanyCode;
 }

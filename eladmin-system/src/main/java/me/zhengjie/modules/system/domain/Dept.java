@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -20,6 +23,8 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name="dept")
+@GenericGenerator(name = "jpa-uuid", strategy = "uuid")
+
 public class Dept implements Serializable {
 
     @Id
@@ -43,9 +48,34 @@ public class Dept implements Serializable {
     @ManyToMany(mappedBy = "depts")
     private Set<Role> roles;
 
+    @Column(name = "remark")
+    private String remark;
+
+    //不允许有两个id
+    @GeneratedValue(generator = "jpa-uuid")
+    @Column(name = "keywords")
+    private String keywords;
+
+
+    @Column(name = "version",nullable = false)
+    @NotNull
+    private Long version;
+
+
+    @Column(name = "update_time")
+    @UpdateTimestamp
+    private Timestamp updateTime;
+
     @Column(name = "create_time")
     @CreationTimestamp
     private Timestamp createTime;
+
+
+
+    //@NotNull
+    @Column(name = "top_company_code")
+    private String topCompanyCode;
+
 
     public @interface Update {}
 

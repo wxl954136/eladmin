@@ -72,6 +72,7 @@ public class AuthController {
     @AnonymousAccess
     @PostMapping(value = "/login")
     public ResponseEntity<Object> login(@Validated @RequestBody AuthUser authUser, HttpServletRequest request){
+
         // 密码解密
         RSA rsa = new RSA(privateKey, null);
         String password = new String(rsa.decrypt(authUser.getPassword(), KeyType.PrivateKey));

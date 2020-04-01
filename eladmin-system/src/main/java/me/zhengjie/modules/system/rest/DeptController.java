@@ -1,6 +1,7 @@
 package me.zhengjie.modules.system.rest;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.IdUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import me.zhengjie.modules.system.service.dto.DeptDto;
 import me.zhengjie.modules.system.service.dto.DeptQueryCriteria;
 import me.zhengjie.utils.RedisUtils;
 import me.zhengjie.utils.ThrowableUtil;
+import me.zhengjie.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -79,12 +81,11 @@ public class DeptController {
     @PreAuthorize("@el.check('user:list','dept:list')")
     public ResponseEntity<Object> getDepts(DeptQueryCriteria criteria){
         // 数据权限
-        String auth = request.getHeader("Authorization");
-
-        JwtUser jwtUser = (JwtUser)redisUtils.get(auth);
-        log.info("2===="  + jwtUser.getEmail() + "--" + jwtUser.getTopCompanyCode());
+        //获取缓存方法示例
+        JwtUser jwtUser = (JwtUser)redisUtils.get(request.getHeader("Authorization"));
        //lukeWang
         criteria.setIds(dataScope.getDeptIds());
+        criteria.setTopCompanyCode(jwtUser.getTopCompanyCode());
         List<DeptDto> deptDtos = deptService.queryAll(criteria);
         return new ResponseEntity<>(deptService.buildTree(deptDtos),HttpStatus.OK);
     }
@@ -97,6 +98,9 @@ public class DeptController {
         if (resources.getId() != null) {
             throw new BadRequestException("A new "+ ENTITY_NAME +" cannot already have an ID");
         }
+        JwtUser jwtUser = (JwtUser)UserUtil.getLoginUser(redisUtils,request);
+        resources.setTopCompanyCode(jwtUser.getTopCompanyCode());
+        resources.setKeywords(IdUtil.simpleUUID());
         return new ResponseEntity<>(deptService.create(resources),HttpStatus.CREATED);
     }
 
@@ -105,6 +109,8 @@ public class DeptController {
     @PutMapping
     @PreAuthorize("@el.check('dept:edit')")
     public ResponseEntity<Object> update(@Validated(Dept.Update.class) @RequestBody Dept resources){
+
+        JwtUser jwtUser = (JwtUser)redisUtils.get(request.getHeader("Authorization"));
         deptService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

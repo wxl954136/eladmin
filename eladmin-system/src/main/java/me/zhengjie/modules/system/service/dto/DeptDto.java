@@ -18,6 +18,7 @@ public class DeptDto implements Serializable {
 
     private Long id;
 
+
     private String name;
 
     @NotNull
@@ -28,7 +29,17 @@ public class DeptDto implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<DeptDto> children;
 
+    private String remark;
+
+    private String keywords;
+
+    private Long version;
+
+    private Timestamp updateTime;
+
     private Timestamp createTime;
+
+    private String topCompanyCode;
 
     public String getLabel() {
         return name;

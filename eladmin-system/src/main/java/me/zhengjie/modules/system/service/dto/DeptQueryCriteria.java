@@ -28,4 +28,7 @@ public class DeptQueryCriteria{
 
     @Query(type = Query.Type.BETWEEN)
     private List<Timestamp> createTime;
+
+    @Query(type = Query.Type.EQUAL)
+    private String topCompanyCode;
 }
