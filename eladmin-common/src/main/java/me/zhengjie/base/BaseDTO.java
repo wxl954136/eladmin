@@ -14,17 +14,19 @@ import java.sql.Timestamp;
 public class BaseDTO  implements Serializable {
 
     private Boolean isDelete;
-
+    private Integer version;
     private Timestamp createTime;
-
     private Timestamp updateTime;
+    private String topCompanyCode;
 
     @Override
     public String toString() {
         return "BaseDTO{" +
                 "isDelete=" + isDelete +
+                ", version=" + version +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
+                ", topCompanyCode=" + topCompanyCode +
                 '}';
     }
 }

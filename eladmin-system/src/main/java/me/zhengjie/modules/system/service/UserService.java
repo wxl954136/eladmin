@@ -50,6 +50,8 @@ public interface UserService {
 
     UserDto findByName(String userName);
 
+
+
     /**
      * 根据用户名及企业代码查询
      * @param userName /
@@ -57,6 +59,9 @@ public interface UserService {
      * @return /
      */
     UserDto findByNameCode(String userName,String topCompanyCode);
+
+
+
 
     /**
      * 修改密码
@@ -106,4 +111,13 @@ public interface UserService {
      * @param resources /
      */
     void updateCenter(User resources);
+
+
+    /**
+     * 导出数据
+     * @param dept_id 部门id
+     * @param top_company_code /
+     * @throws IOException /
+     */
+    int findByDeptUseCount(Long dept_id,String top_company_code);
 }

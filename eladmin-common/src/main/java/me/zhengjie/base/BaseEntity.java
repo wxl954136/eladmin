@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.lang.reflect.Field;
@@ -24,13 +25,26 @@ public class BaseEntity implements Serializable {
     @Column(name = "is_delete", columnDefinition = "bit default 0")
     private Boolean isDelete = false;
 
+
+    @Column(name = "version",nullable = false)
+    @NotNull
+    private Integer version;
+
     @Column(name = "create_time")
     @CreationTimestamp
     private Timestamp createTime;
 
+
+
     @Column(name = "update_time")
     @UpdateTimestamp
     private Timestamp updateTime;
+
+    /** 企业代码 */
+    @Column(name = "top_company_code")
+    private String topCompanyCode;
+
+
 
     public @interface Update {}
 

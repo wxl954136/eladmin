@@ -12,8 +12,10 @@ import me.zhengjie.modules.security.config.SecurityProperties;
 import me.zhengjie.modules.security.security.vo.JwtUser;
 import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.service.DeptService;
+import me.zhengjie.modules.system.service.UserService;
 import me.zhengjie.modules.system.service.dto.DeptDto;
 import me.zhengjie.modules.system.service.dto.DeptQueryCriteria;
+import me.zhengjie.modules.system.service.mapper.DeptMapper;
 import me.zhengjie.utils.RedisUtils;
 import me.zhengjie.utils.ThrowableUtil;
 import me.zhengjie.utils.UserUtil;
@@ -23,7 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
+import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -53,13 +55,11 @@ public class DeptController {
     @Autowired
     private HttpServletRequest request;
 
-
-/*
-不明白为什么response不可以自动装配
     @Autowired
-    private HttpServletResponse response;
- */
+    private UserService userService;
 
+    @Autowired
+    private  DeptMapper deptMapper;
 
 
     public DeptController(DeptService deptService, DataScope dataScope) {
@@ -83,9 +83,9 @@ public class DeptController {
         // 数据权限
         //获取缓存方法示例
         JwtUser jwtUser = (JwtUser)redisUtils.get(request.getHeader("Authorization"));
-       //lukeWang
         criteria.setIds(dataScope.getDeptIds());
         criteria.setTopCompanyCode(jwtUser.getTopCompanyCode());
+        criteria.setIsDelete(false);  //如何设置公共条件呢
         List<DeptDto> deptDtos = deptService.queryAll(criteria);
         return new ResponseEntity<>(deptService.buildTree(deptDtos),HttpStatus.OK);
     }
@@ -109,12 +109,78 @@ public class DeptController {
     @PutMapping
     @PreAuthorize("@el.check('dept:edit')")
     public ResponseEntity<Object> update(@Validated(Dept.Update.class) @RequestBody Dept resources){
-
-        JwtUser jwtUser = (JwtUser)redisUtils.get(request.getHeader("Authorization"));
+        //JwtUser jwtUser = (JwtUser)redisUtils.get(request.getHeader("Authorization"));
+        //修改时不允许删除
+        resources.setIsDelete(false);
         deptService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    /*
+    @Log("删除部门")
+    @ApiOperation("删除部门")
+    @DeleteMapping
+    @PreAuthorize("@el.check('dept:del')")
+    public ResponseEntity<Object> delete(@RequestBody Set<Long> ids){
+        log.info("1------");
+        Set<DeptDto> deptDtos = new HashSet<>();
+        for (Long id : ids) {
+            List<Dept> deptList = deptService.findByPid(id);
+            //deptDtos.add(deptService.findById(id));  删除的全部逻辑删除标记
+            DeptDto deptDto = deptService.findById(id);
+            deptDto.setIsDelete(true);
+            deptDtos.add(deptDto);
+            if(CollectionUtil.isNotEmpty(deptList)){
+                deptDtos = deptService.getDeleteDdeptService.update(resources);epts(deptList, deptDtos);
+            }
+        }
+        try {
+            //删除的全部逻辑删除标记
+            //deptService.delete(deptDtos);
+            for(DeptDto deptDto:deptDtos)
+            {
+                deptService.update(deptMapper.toEntity(deptDto));
+            }
+        }catch (Throwable e){
+            ThrowableUtil.throwForeignKeyException(e, "所选部门中存在岗位或者角色关联，请取消关联后再试");
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    */
 
+    //删除记录，更改逻辑删除
+
+    @Log("删除部门")
+    @ApiOperation("删除部门")
+    @DeleteMapping
+    @PreAuthorize("@el.check('dept:del')")
+    //@Validated @RequestBody
+    public ResponseEntity<Object> delete(@RequestBody Set<Long> ids){
+        Set<DeptDto> deptDtos = new HashSet<>();
+        for (Long id : ids) {
+            List<Dept> deptList = deptService.findByPid(id);
+            deptDtos.add(deptService.findById(id));
+            if(CollectionUtil.isNotEmpty(deptList)){
+                deptDtos = deptService.getDeleteDepts(deptList, deptDtos);
+            }
+        }
+        boolean isFoundRelFromUser = false;
+        JwtUser jwtUser = (JwtUser) UserUtil.getLoginUser(redisUtils,request);
+        for(DeptDto deptDto:deptDtos){
+            if (userService.findByDeptUseCount(deptDto.getId(),jwtUser.getTopCompanyCode()) > 0 )
+            {
+                isFoundRelFromUser = true;
+                break;
+            }
+        }
+        if (isFoundRelFromUser) {throw new BadRequestException("所选部门中存在岗位或者角色关联，请取消关联后再试！");}
+        try {
+            deptService.delete(deptDtos);
+        }catch (Throwable e){
+            ThrowableUtil.throwForeignKeyException(e, "所选部门中存在岗位或者角色关联，请取消关联后再试");
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+/*
     @Log("删除部门")
     @ApiOperation("删除部门")
     @DeleteMapping
@@ -132,7 +198,9 @@ public class DeptController {
             deptService.delete(deptDtos);
         }catch (Throwable e){
             ThrowableUtil.throwForeignKeyException(e, "所选部门中存在岗位或者角色关联，请取消关联后再试");
-        }
+}
         return new ResponseEntity<>(HttpStatus.OK);
-    }
+        }
+        */
+
 }

@@ -1,11 +1,13 @@
 package me.zhengjie.modules.system.repository;
 
+import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Zheng Jie
@@ -18,7 +20,6 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
      * @param username 用户名
      * @return /
      */
-
     User findByUsername(String username);
     /**
      * 根据用户名查询
@@ -52,4 +53,20 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
     @Modifying
     @Query(value = "update user set email = ?2 where username = ?1",nativeQuery = true)
     void updateEmail(String username, String email);
+
+
+/*
+    @Query("select new com.wmd.springtest.jparepcustomobj.domain.UserDept(" +
+            "u.id, u.name, d.id, d.name" +
+            ") " +
+            "from User u, Dept d " +
+            "where u.deptId=d.id")
+    List findAllForUserDept();
+*/
+    @Query(value = " select count(1) from user  " +
+                   " where dept_id=?1 " +
+                   " and  top_company_code =?2 " ,
+                    nativeQuery = true
+          )
+    int findByDeptUseCount(Long dept_id,String top_company_code);
 }

@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -20,6 +21,7 @@ import java.util.Set;
 * @date 2019-03-25
 */
 @Entity
+@Where(clause=" is_delete= 0 ") //必须是数据库字段，不可以是实体bean field
 @Getter
 @Setter
 @Table(name="dept")
@@ -55,6 +57,10 @@ public class Dept implements Serializable {
     @GeneratedValue(generator = "jpa-uuid")
     @Column(name = "keywords")
     private String keywords;
+
+    /** 删除标识 0:未删除  1：删除**/
+    @Column(name = "is_delete", columnDefinition = "bit default 0")
+    private Boolean isDelete = false;
 
 
     @Column(name = "version",nullable = false)

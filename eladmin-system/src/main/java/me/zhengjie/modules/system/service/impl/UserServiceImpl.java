@@ -149,8 +149,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Cacheable(key = "'loadUserByUsername:'+#p0")
     public UserDto findByName(String userName) {
-        System.out.println("===81====");
-
         User user;
         if(ValidationUtil.isEmail(userName)){
             user = userRepository.findByEmail(userName);
@@ -240,5 +238,12 @@ public class UserServiceImpl implements UserService {
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);
+    }
+
+    //用来判断是否有正在使用的部门部分
+    @Override
+    public int findByDeptUseCount(Long dept_id,String top_company_code)
+    {
+        return userRepository.findByDeptUseCount(dept_id,top_company_code);
     }
 }

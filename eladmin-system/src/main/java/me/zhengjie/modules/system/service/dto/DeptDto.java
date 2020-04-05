@@ -33,6 +33,8 @@ public class DeptDto implements Serializable {
 
     private String keywords;
 
+    private Boolean isDelete;
+
     private Long version;
 
     private Timestamp updateTime;

@@ -3,6 +3,9 @@ package me.zhengjie.modules.system.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.system.domain.Dept;
+import me.zhengjie.modules.system.domain.User;
+import me.zhengjie.modules.system.repository.UserRepository;
+import me.zhengjie.modules.system.service.UserService;
 import me.zhengjie.modules.system.service.dto.DeptDto;
 import me.zhengjie.modules.system.service.dto.DeptQueryCriteria;
 import me.zhengjie.utils.FileUtil;
@@ -11,6 +14,7 @@ import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.modules.system.service.DeptService;
 import me.zhengjie.modules.system.service.mapper.DeptMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -36,6 +40,12 @@ public class DeptServiceImpl implements DeptService {
     private final DeptRepository deptRepository;
 
     private final DeptMapper deptMapper;
+
+    @Autowired
+    private  UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public DeptServiceImpl(DeptRepository deptRepository, DeptMapper deptMapper) {
         this.deptRepository = deptRepository;
@@ -125,7 +135,7 @@ public class DeptServiceImpl implements DeptService {
         resources.setId(dept.getId());
         deptRepository.save(resources);
     }
-
+/*
     @Override
     @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
@@ -135,6 +145,21 @@ public class DeptServiceImpl implements DeptService {
         }
     }
 
+ */
+    @Override
+    @CacheEvict(allEntries = true)
+    @Transactional(rollbackFor = Exception.class)
+    public void delete(Set<DeptDto> deptDtos) {
+        for (DeptDto deptDto : deptDtos) {
+            Optional<Dept> dept = deptRepository.findById(deptDto.getId());
+            dept.ifPresent(o->{
+                dept.get().setIsDelete(true);
+                deptRepository.save(dept.get());
+
+             //   throw new BadRequestException("禁止删除");
+            });
+        }
+    }
     @Override
     public void download(List<DeptDto> deptDtos, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
@@ -159,4 +184,13 @@ public class DeptServiceImpl implements DeptService {
         }
         return deptDtos;
     }
+
+    @Override
+    public int findByDeptUseCount(Long dept_id,String top_company_code){
+        int num = userRepository.findByDeptUseCount(dept_id,top_company_code);
+
+        //int num = userRepository.findById(resources.getId()).orElseGet(User::new);
+        return 0 ;
+    }
+
 }

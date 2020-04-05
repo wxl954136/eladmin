@@ -71,6 +71,14 @@ public interface DeptService {
     Set<Dept> findByRoleIds(Long id);
 
     /**
+     * 便于部门删除修改时，是否有正在使用的部门，如果有，则不允许 删除
+     * @param dept_id 部门关联的id
+     * @param top_company_code 公司代码
+     * @throws IOException /
+     */
+    int findByDeptUseCount(Long dept_id,String top_company_code);
+
+    /**
      * 导出数据
      * @param queryAll 待导出的数据
      * @param response /
