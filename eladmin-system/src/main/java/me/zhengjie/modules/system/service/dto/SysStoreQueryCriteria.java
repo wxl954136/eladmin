@@ -1,0 +1,21 @@
+package me.zhengjie.modules.system.service.dto;
+
+import lombok.Data;
+import java.util.List;
+import me.zhengjie.annotation.Query;
+
+/**
+* @author lukeWang
+* @date 2020-04-03
+*/
+@Data
+public class SysStoreQueryCriteria{
+
+    /** 模糊 */
+    @Query(type = Query.Type.INNER_LIKE)
+    private String name;
+
+    /** 精确 */
+    @Query
+    private Boolean enabled;
+}
