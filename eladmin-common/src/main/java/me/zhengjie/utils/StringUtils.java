@@ -1,6 +1,7 @@
 package me.zhengjie.utils;
 
 import cn.hutool.core.io.resource.ClassPathResource;
+import cn.hutool.core.util.IdUtil;
 import eu.bitwalker.useragentutils.Browser;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.lionsoul.ip2region.DataBlock;
@@ -195,4 +196,14 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         }
         return weekDays[w];
     }
+
+    public static String getUUID( String uuid)
+    {
+        if (StringUtils.isEmpty(uuid) || uuid.toUpperCase().equalsIgnoreCase("NEW") ){
+            uuid = IdUtil.simpleUUID();
+        }
+        return uuid;
+    }
+
+
 }
