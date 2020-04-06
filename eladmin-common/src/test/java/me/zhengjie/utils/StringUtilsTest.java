@@ -1,4 +1,4 @@
-package me.zhengjie.utils;
+package me.luke.utils;
 
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -6,7 +6,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static me.zhengjie.utils.StringUtils.*;
+import static me.luke.utils.StringUtils.*;
 import static org.junit.Assert.*;
 
 public class StringUtilsTest {

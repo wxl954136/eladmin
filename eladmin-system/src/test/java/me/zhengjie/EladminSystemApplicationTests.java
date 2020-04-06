@@ -1,4 +1,4 @@
-package me.zhengjie;
+package me.luke;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

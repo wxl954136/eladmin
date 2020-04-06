@@ -1,10 +1,10 @@
-package me.zhengjie.utils;
+package me.luke.utils;
 
 import org.junit.Test;
 import org.springframework.mock.web.MockMultipartFile;
 
 import static org.junit.Assert.*;
-import static me.zhengjie.utils.FileUtil.*;
+import static me.luke.utils.FileUtil.*;
 
 public class FileUtilTest {
 
