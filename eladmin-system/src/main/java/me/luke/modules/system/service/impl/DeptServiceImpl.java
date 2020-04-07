@@ -190,7 +190,7 @@ public class DeptServiceImpl implements DeptService {
         int num = userRepository.findByDeptUseCount(dept_id,top_company_code);
 
         //int num = userRepository.findById(resources.getId()).orElseGet(User::new);
-        return 0 ;
+        return num ;
     }
 
 }

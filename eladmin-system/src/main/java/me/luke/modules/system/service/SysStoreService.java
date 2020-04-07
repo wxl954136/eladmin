@@ -38,6 +38,15 @@ public interface SysStoreService {
      * @return SysStoreDto
      */
     SysStoreDto findById(Long id);
+    /**
+     * 根据ID查询
+     * @param name 名字
+     * @return SysStoreDto
+     */
+    SysStoreDto findByName(String name);
+
+
+    int findByNameCount(Long id,String name,String topCompanyCode);
 
 
     /**

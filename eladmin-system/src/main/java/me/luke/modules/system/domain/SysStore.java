@@ -35,6 +35,7 @@ public class SysStore extends BaseEntity  {
     /** uuid相关联 */
     @GeneratedValue(generator = "jpa-uuid")
     @Column(name = "keywords")
+
     private String keywords;
 
     /** 仓库名称 */

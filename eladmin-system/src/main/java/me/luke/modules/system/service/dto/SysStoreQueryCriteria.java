@@ -1,6 +1,8 @@
 package me.luke.modules.system.service.dto;
 
 import lombok.Data;
+
+import java.sql.Timestamp;
 import java.util.List;
 import me.luke.annotation.Query;
 
@@ -21,6 +23,9 @@ public class SysStoreQueryCriteria{
 
     @Query(type = Query.Type.EQUAL)
     private Boolean isDelete;
+
+    @Query(type = Query.Type.BETWEEN)
+    private List<Timestamp> createTime;
 
 
     @Query(type = Query.Type.EQUAL)

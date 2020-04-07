@@ -1,5 +1,6 @@
 package me.luke.modules.system.service.impl;
 
+import me.luke.exception.BadRequestException;
 import me.luke.modules.system.domain.SysStore;
 import me.luke.utils.*;
 import me.luke.modules.system.repository.SysStoreRepository;
@@ -62,10 +63,28 @@ public class SysStoreServiceImpl implements SysStoreService {
     }
 
     @Override
+    public SysStoreDto findByName(String name) {
+        /*
+        SysStore sysStore = sysStoreRepository.findByName(name).orElseGet(SysStore::new);
+        ValidationUtil.isNull(sysStore.getId(),"SysStore","name",name);
+        return sysStoreMapper.toDto(sysStore);
+
+         */
+        return null;
+    }
+
+    @Override
+    public int findByNameCount(Long id,String name, String topCompanyCode) {
+        int num = sysStoreRepository.findByNameCount(id,name,topCompanyCode);
+        return num;
+    }
+
+    @Override
     @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public SysStoreDto create(SysStore resources) {
-
+        int nameSameCount = sysStoreRepository.findByNameCount(-1l, resources.getName(), resources.getTopCompanyCode());
+        if (nameSameCount > 0 )  throw new BadRequestException("相同的仓库名称已经存在，请修改仓库名称");
         return sysStoreMapper.toDto(sysStoreRepository.save(resources));
     }
 
@@ -75,6 +94,12 @@ public class SysStoreServiceImpl implements SysStoreService {
     public void update(SysStore resources) {
         SysStore sysStore = sysStoreRepository.findById(resources.getId()).orElseGet(SysStore::new);
         ValidationUtil.isNull( sysStore.getId(),"SysStore","id",resources.getId());
+        if(!sysStore.getVersion().equals(resources.getVersion()))   throw new BadRequestException("数据被其他用户修改，请重新获取数据修改!");
+
+
+        int nameSameCount = sysStoreRepository.findByNameCount(resources.getId(), resources.getName(), resources.getTopCompanyCode());
+        if (nameSameCount > 0 )  throw new BadRequestException("相同的仓库名称已经存在，请修改仓库名称");
+        resources.setVersion(resources.getVersion()==null?0:resources.getVersion() + 1);
         sysStore.copy(resources);
         sysStoreRepository.save(sysStore);
     }
@@ -92,6 +117,7 @@ public class SysStoreServiceImpl implements SysStoreService {
             Optional<SysStore> sysStore = sysStoreRepository.findById(sysStoreDto.getId());
             sysStore.ifPresent(o->{
                 sysStore.get().setIsDelete(true);
+                sysStore.get().setVersion(sysStore.get().getVersion()==null?0:sysStore.get().getVersion() + 1);
                 sysStoreRepository.save(sysStore.get());
             });
         }
@@ -111,12 +137,12 @@ public class SysStoreServiceImpl implements SysStoreService {
         List<Map<String, Object>> list = new ArrayList<>();
         for (SysStoreDto sysStore : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put("uuid", sysStore.getKeywords());
+           // map.put("uuid", sysStore.getKeywords());
             map.put("仓库名称", sysStore.getName());
-            map.put("状态", sysStore.getEnabled());
+            map.put("状态", sysStore.getEnabled()?"启用":"禁用");
             map.put("备注", sysStore.getRemark());
-            map.put("删除标记", sysStore.getIsDelete());
-            map.put("版本号", sysStore.getVersion());
+            //map.put("删除标记", sysStore.getIsDelete());
+            //map.put("版本号", sysStore.getVersion());
             map.put("修改日期", sysStore.getUpdateTime());
             map.put("创建日期", sysStore.getCreateTime());
             map.put("企业代码", sysStore.getTopCompanyCode());

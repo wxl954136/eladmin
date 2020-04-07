@@ -50,6 +50,8 @@ public class SysStoreController {
     @GetMapping(value = "/download")
     @PreAuthorize("@el.check('sysStore:list')")
     public void download(HttpServletResponse response, SysStoreQueryCriteria criteria) throws IOException {
+        JwtUser jwtUser = (JwtUser)redisUtils.get(request.getHeader("Authorization"));
+        criteria.setTopCompanyCode(jwtUser.getTopCompanyCode());
         sysStoreService.download(sysStoreService.queryAll(criteria), response);
     }
 
