@@ -53,6 +53,11 @@ public class SysStore extends BaseEntity  {
     @Column(name="sort" ,nullable = false)
     @NotNull
     private Long sort;
+    /** 关联的信息 */
+
+    @OneToOne
+    @JoinColumn(name = "dept_id")
+    private Dept dept;
 
     /** 备注 */
     @Column(name = "remark")

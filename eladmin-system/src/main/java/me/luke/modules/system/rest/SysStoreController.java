@@ -2,11 +2,14 @@ package me.luke.modules.system.rest;
 
 import cn.hutool.core.util.IdUtil;
 import me.luke.aop.log.Log;
+import me.luke.config.DataScope;
 import me.luke.modules.security.security.vo.JwtUser;
 import me.luke.modules.system.domain.SysStore;
+import me.luke.modules.system.service.DeptService;
 import me.luke.modules.system.service.SysStoreService;
 import me.luke.modules.system.service.dto.SysStoreDto;
 import me.luke.modules.system.service.dto.SysStoreQueryCriteria;
+import me.luke.utils.PageUtil;
 import me.luke.utils.RedisUtils;
 import me.luke.utils.StringUtils;
 import me.luke.utils.UserUtil;
@@ -16,6 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
@@ -41,6 +46,13 @@ public class SysStoreController {
     @Autowired
     private HttpServletRequest request;
 
+    @Autowired
+    private DataScope dataScope;
+
+    @Autowired
+    private DeptService deptService ;
+
+
     public SysStoreController(SysStoreService sysStoreService) {
         this.sysStoreService = sysStoreService;
     }
@@ -62,7 +74,34 @@ public class SysStoreController {
     public ResponseEntity<Object> getSysStores(SysStoreQueryCriteria criteria, Pageable pageable){
         JwtUser jwtUser = (JwtUser)redisUtils.get(request.getHeader("Authorization"));
         criteria.setTopCompanyCode(jwtUser.getTopCompanyCode());
-        return new ResponseEntity<>(sysStoreService.queryAll(criteria,pageable),HttpStatus.OK);
+        Set<Long> deptSet = new HashSet<>();
+        Set<Long> result = new HashSet<>();
+        System.out.println("luke:===" + criteria.getDeptId());
+        if (!ObjectUtils.isEmpty(criteria.getDeptId())) {
+            deptSet.add(criteria.getDeptId());
+            deptSet.addAll(dataScope.getDeptChildren(deptService.findByPid(criteria.getDeptId())));
+        }
+        Set<Long> deptIds = dataScope.getDeptIds();
+
+        if (!CollectionUtils.isEmpty(deptIds) && !CollectionUtils.isEmpty(deptSet)){
+            // 取交集
+            result.addAll(deptSet);
+            result.retainAll(deptIds);
+            // 若无交集，则代表无数据权限
+            criteria.setDeptIds(result);
+            if(result.size() == 0){
+                return new ResponseEntity<>(PageUtil.toPage(null,0),HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(sysStoreService.queryAll(criteria,pageable),HttpStatus.OK);
+            }
+            // 否则取并集
+        } else {
+            result.addAll(deptSet);
+            result.addAll(deptIds);
+            criteria.setDeptIds(result);
+            return new ResponseEntity<>(sysStoreService.queryAll(criteria,pageable),HttpStatus.OK);
+        }
+       // return new ResponseEntity<>(sysStoreService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping

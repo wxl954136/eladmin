@@ -10,7 +10,8 @@ import org.mapstruct.ReportingPolicy;
 * @author lukeWang
 * @date 2020-04-03
 */
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring",uses = {DeptMapper.class},unmappedTargetPolicy = ReportingPolicy.IGNORE)
+//@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface SysStoreMapper extends BaseMapper<SysStoreDto, SysStore> {
 
 }

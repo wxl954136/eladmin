@@ -28,6 +28,9 @@ public class SysStoreDto extends  BaseDTO   {
     /** 状态 */
     private Boolean enabled;
 
+    private DeptSmallDto dept;
+
+    private Long deptId;
     /** 备注 */
     private String remark;
 

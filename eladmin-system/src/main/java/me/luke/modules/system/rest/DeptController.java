@@ -82,11 +82,13 @@ public class DeptController {
     public ResponseEntity<Object> getDepts(DeptQueryCriteria criteria){
         // 数据权限
         //获取缓存方法示例
+
         JwtUser jwtUser = (JwtUser)redisUtils.get(request.getHeader("Authorization"));
         criteria.setIds(dataScope.getDeptIds());
         criteria.setTopCompanyCode(jwtUser.getTopCompanyCode());
         criteria.setIsDelete(false);  //如何设置公共条件呢
         List<DeptDto> deptDtos = deptService.queryAll(criteria);
+
         return new ResponseEntity<>(deptService.buildTree(deptDtos),HttpStatus.OK);
     }
 

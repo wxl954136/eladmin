@@ -4,6 +4,8 @@ import lombok.Data;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
+
 import me.luke.annotation.Query;
 
 /**
@@ -17,6 +19,8 @@ public class SysStoreQueryCriteria{
     @Query(type = Query.Type.INNER_LIKE)
     private String name;
 
+    @Query(propName = "id", type = Query.Type.IN, joinName = "dept")
+    private Set<Long> deptIds;
     /** 精确 */
     @Query
     private Boolean enabled;
@@ -27,6 +31,8 @@ public class SysStoreQueryCriteria{
     @Query(type = Query.Type.BETWEEN)
     private List<Timestamp> createTime;
 
+    @Query(propName = "id", joinName = "dept")
+    private Long deptId;
 
     @Query(type = Query.Type.EQUAL)
     private String topCompanyCode;
