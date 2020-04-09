@@ -1,10 +1,11 @@
-package me.luke.modules.system.service.mapper;
+package me.luke.modules.system.service.mapper.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Generated;
 import me.luke.modules.system.domain.SysSkuClassify;
 import me.luke.modules.system.service.dto.SysSkuClassifyDto;
+import me.luke.modules.system.service.mapper.SysSkuClassifyMapper;
 import org.springframework.stereotype.Component;
 
 @Generated(

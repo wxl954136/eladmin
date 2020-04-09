@@ -1,4 +1,4 @@
-package me.luke.modules.system.service.mapper;
+package me.luke.modules.system.service.mapper.impl;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -14,6 +14,9 @@ import me.luke.modules.system.service.dto.DeptSmallDto;
 import me.luke.modules.system.service.dto.JobSmallDto;
 import me.luke.modules.system.service.dto.RoleSmallDto;
 import me.luke.modules.system.service.dto.UserDto;
+import me.luke.modules.system.service.mapper.JobMapper;
+import me.luke.modules.system.service.mapper.RoleMapper;
+import me.luke.modules.system.service.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

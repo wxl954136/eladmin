@@ -1,4 +1,4 @@
-package me.luke.modules.system.service.mapper;
+package me.luke.modules.system.service.mapper.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,7 @@ import me.luke.modules.system.domain.DictDetail;
 import me.luke.modules.system.service.dto.DictDetailDto;
 import me.luke.modules.system.service.dto.DictDto;
 import me.luke.modules.system.service.dto.DictSmallDto;
+import me.luke.modules.system.service.mapper.DictMapper;
 import org.springframework.stereotype.Component;
 
 

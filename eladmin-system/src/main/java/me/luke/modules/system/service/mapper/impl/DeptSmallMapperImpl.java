@@ -1,10 +1,11 @@
-package me.luke.modules.system.service.mapper;
+package me.luke.modules.system.service.mapper.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import me.luke.modules.system.domain.Dept;
 import me.luke.modules.system.service.dto.DeptSmallDto;
+import me.luke.modules.system.service.mapper.DeptSmallMapper;
 import org.springframework.stereotype.Component;
 
 

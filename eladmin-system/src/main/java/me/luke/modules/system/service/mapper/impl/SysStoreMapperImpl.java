@@ -1,4 +1,4 @@
-package me.luke.modules.system.service.mapper;
+package me.luke.modules.system.service.mapper.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,8 @@ import me.luke.modules.system.domain.Dept;
 import me.luke.modules.system.domain.SysStore;
 import me.luke.modules.system.service.dto.DeptSmallDto;
 import me.luke.modules.system.service.dto.SysStoreDto;
+import me.luke.modules.system.service.mapper.DeptMapper;
+import me.luke.modules.system.service.mapper.SysStoreMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

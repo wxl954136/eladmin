@@ -39,7 +39,7 @@ public class SecurityUtils {
     public static Object getUserLoginInfo(){
         Object  object;
         try {
-            object = (Object) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            object = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         } catch (Exception e) {
             throw new BadRequestException(HttpStatus.UNAUTHORIZED, "登录状态过期");
         }

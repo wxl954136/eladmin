@@ -1,10 +1,11 @@
-package me.luke.modules.system.service.mapper;
+package me.luke.modules.system.service.mapper.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Generated;
 import me.luke.modules.system.domain.Role;
 import me.luke.modules.system.service.dto.RoleSmallDto;
+import me.luke.modules.system.service.mapper.RoleSmallMapper;
 import org.springframework.stereotype.Component;
 
 @Generated(

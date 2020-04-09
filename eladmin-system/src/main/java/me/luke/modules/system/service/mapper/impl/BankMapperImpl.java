@@ -1,10 +1,11 @@
-package me.luke.modules.system.service.mapper;
+package me.luke.modules.system.service.mapper.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Generated;
 import me.luke.modules.system.domain.Bank;
 import me.luke.modules.system.service.dto.BankDto;
+import me.luke.modules.system.service.mapper.BankMapper;
 import org.springframework.stereotype.Component;
 
 @Generated(
