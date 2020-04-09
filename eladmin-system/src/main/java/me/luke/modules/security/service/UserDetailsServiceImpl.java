@@ -33,7 +33,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username){
-        String obj_user[] = username.split(",");
+        String[] obj_user = username.split(",");
         UserDto user = userService.findByNameCode(obj_user[0],obj_user[1]);
         if (user == null) {
             throw new BadRequestException("账号不存在");
