@@ -35,7 +35,6 @@ public class BaseEntity implements Serializable {
     private Timestamp createTime;
 
 
-
     @Column(name = "update_time")
     @UpdateTimestamp
     private Timestamp updateTime;
