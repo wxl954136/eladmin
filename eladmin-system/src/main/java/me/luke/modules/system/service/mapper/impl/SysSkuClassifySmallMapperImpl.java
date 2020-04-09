@@ -2,7 +2,6 @@ package me.luke.modules.system.service.mapper.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.Generated;
 import me.luke.modules.system.domain.SysSkuClassify;
 import me.luke.modules.system.service.dto.SysSkuClassifySmallDto;
 import me.luke.modules.system.service.mapper.SysSkuClassifySmallMapper;
@@ -19,10 +18,9 @@ public class SysSkuClassifySmallMapperImpl implements SysSkuClassifySmallMapper 
         }
 
         SysSkuClassify sysSkuClassify = new SysSkuClassify();
-
         sysSkuClassify.setId( dto.getId() );
         sysSkuClassify.setName( dto.getName() );
-
+        sysSkuClassify.setFullName(dto.getFullName());
         return sysSkuClassify;
     }
 
@@ -31,12 +29,10 @@ public class SysSkuClassifySmallMapperImpl implements SysSkuClassifySmallMapper 
         if ( entity == null ) {
             return null;
         }
-
         SysSkuClassifySmallDto sysSkuClassifySmallDto = new SysSkuClassifySmallDto();
-
         sysSkuClassifySmallDto.setId( entity.getId() );
         sysSkuClassifySmallDto.setName( entity.getName() );
-
+        sysSkuClassifySmallDto.setFullName(entity.getFullName());
         return sysSkuClassifySmallDto;
     }
 

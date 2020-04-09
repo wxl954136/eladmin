@@ -39,6 +39,9 @@ public class SysSkuClassify  extends BaseEntity {
     @Column(name = "name",nullable = false)
     @NotBlank
     private String name;
+    //nullable null able: false:不允许为null  为将来报表取值
+    @Column(name = "full_name")
+    private String fullName;
 
     @NotNull
     private Boolean enabled;

@@ -14,7 +14,7 @@ public class DeptMapperImpl implements DeptMapper {
 
     @Override
     public Dept toEntity(DeptDto dto) {
-        /*
+
         if ( dto == null ) {
             return null;
         }
@@ -30,8 +30,7 @@ public class DeptMapperImpl implements DeptMapper {
         dept.setVersion( dto.getVersion());  //每次保存时行记录版本号须自增
         dept.setKeywords( dto.getKeywords());
         dept.setTopCompanyCode( dto.getTopCompanyCode() );
-        return dept;*/
-        return null;
+        return dept;
     }
 
     @Override

@@ -3,11 +3,11 @@ package me.luke.modules.system.service.mapper.impl;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Generated;
-import me.luke.modules.system.domain.Dept;
 import me.luke.modules.system.domain.SysStore;
-import me.luke.modules.system.service.dto.DeptSmallDto;
+import me.luke.modules.system.domain.SysStore;
+import me.luke.modules.system.service.dto.SysStoreSmallDto;
 import me.luke.modules.system.service.dto.SysStoreDto;
-import me.luke.modules.system.service.mapper.DeptMapper;
+import me.luke.modules.system.service.mapper.SysStoreMapper;
 import me.luke.modules.system.service.mapper.SysStoreMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 public class SysStoreMapperImpl implements SysStoreMapper {
 
     @Autowired
-    private DeptMapper deptMapper;
+    private SysStoreMapper sysStoreMapper;
 
     @Override
     public SysStore toEntity(SysStoreDto dto) {
@@ -33,7 +33,7 @@ public class SysStoreMapperImpl implements SysStoreMapper {
         sysStore.setName( dto.getName() );
         sysStore.setEnabled( dto.getEnabled() );
         sysStore.setSort( dto.getSort() );
-        sysStore.setDept( deptSmallDtoToDept( dto.getDept() ) );
+      //  sysStore.setSysStore( sysStoreSmallDtoToSysStore( dto.getSysStore() ) );
         sysStore.setRemark( dto.getRemark() );
         sysStore.setIsDelete( dto.getIsDelete() );
         sysStore.setVersion( dto.getVersion() );
@@ -49,9 +49,7 @@ public class SysStoreMapperImpl implements SysStoreMapper {
         if ( entity == null ) {
             return null;
         }
-
         SysStoreDto sysStoreDto = new SysStoreDto();
-
         sysStoreDto.setIsDelete( entity.getIsDelete() );
         sysStoreDto.setVersion( entity.getVersion() );
         sysStoreDto.setCreateTime( entity.getCreateTime() );
@@ -62,7 +60,7 @@ public class SysStoreMapperImpl implements SysStoreMapper {
         sysStoreDto.setName( entity.getName() );
         sysStoreDto.setSort( entity.getSort() );
         sysStoreDto.setEnabled( entity.getEnabled() );
-        sysStoreDto.setDept( deptToDeptSmallDto( entity.getDept() ) );
+       // sysStoreDto.setSysStore( sysStoreToSysStoreSmallDto( entity.getSysStore() ) );
         sysStoreDto.setRemark( entity.getRemark() );
 
         return sysStoreDto;
@@ -96,29 +94,29 @@ public class SysStoreMapperImpl implements SysStoreMapper {
         return list;
     }
 
-    protected Dept deptSmallDtoToDept(DeptSmallDto deptSmallDto) {
-        if ( deptSmallDto == null ) {
+    protected SysStore sysStoreSmallDtoToSysStore(SysStoreSmallDto sysStoreSmallDto) {
+        if ( sysStoreSmallDto == null ) {
             return null;
         }
 
-        Dept dept = new Dept();
+        SysStore sysStore = new SysStore();
 
-        dept.setId( deptSmallDto.getId() );
-        dept.setName( deptSmallDto.getName() );
+        sysStore.setId( sysStoreSmallDto.getId() );
+        sysStore.setName( sysStoreSmallDto.getName() );
 
-        return dept;
+        return sysStore;
     }
 
-    protected DeptSmallDto deptToDeptSmallDto(Dept dept) {
-        if ( dept == null ) {
+    protected SysStoreSmallDto sysStoreToSysStoreSmallDto(SysStore sysStore) {
+        if ( sysStore == null ) {
             return null;
         }
 
-        DeptSmallDto deptSmallDto = new DeptSmallDto();
+        SysStoreSmallDto sysStoreSmallDto = new SysStoreSmallDto();
 
-        deptSmallDto.setId( dept.getId() );
-        deptSmallDto.setName( dept.getName() );
+        sysStoreSmallDto.setId( sysStore.getId() );
+        sysStoreSmallDto.setName( sysStore.getName() );
 
-        return deptSmallDto;
+        return sysStoreSmallDto;
     }
 }

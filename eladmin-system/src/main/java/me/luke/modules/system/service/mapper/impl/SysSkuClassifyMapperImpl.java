@@ -23,18 +23,19 @@ public class SysSkuClassifyMapperImpl implements SysSkuClassifyMapper {
         }
 
         SysSkuClassify sysSkuClassify = new SysSkuClassify();
-
+        sysSkuClassify.setId( dto.getId() );
+        sysSkuClassify.setName( dto.getName() );
+        sysSkuClassify.setFullName(dto.getFullName());
+        sysSkuClassify.setEnabled( dto.getEnabled() );
+        sysSkuClassify.setPid( dto.getPid() );
+        sysSkuClassify.setRemark( dto.getRemark() );
+        sysSkuClassify.setKeywords( dto.getKeywords() );
         sysSkuClassify.setIsDelete( dto.getIsDelete() );
         sysSkuClassify.setVersion( dto.getVersion() );
         sysSkuClassify.setCreateTime( dto.getCreateTime() );
         sysSkuClassify.setUpdateTime( dto.getUpdateTime() );
         sysSkuClassify.setTopCompanyCode( dto.getTopCompanyCode() );
-        sysSkuClassify.setId( dto.getId() );
-        sysSkuClassify.setName( dto.getName() );
-        sysSkuClassify.setEnabled( dto.getEnabled() );
-        sysSkuClassify.setPid( dto.getPid() );
-        sysSkuClassify.setRemark( dto.getRemark() );
-        sysSkuClassify.setKeywords( dto.getKeywords() );
+
 
         return sysSkuClassify;
     }
@@ -46,19 +47,18 @@ public class SysSkuClassifyMapperImpl implements SysSkuClassifyMapper {
         }
 
         SysSkuClassifyDto sysSkuClassifyDto = new SysSkuClassifyDto();
-
+        sysSkuClassifyDto.setId( entity.getId() );
+        sysSkuClassifyDto.setName( entity.getName() );
+        sysSkuClassifyDto.setFullName(entity.getFullName());
+        sysSkuClassifyDto.setEnabled( entity.getEnabled() );
+        sysSkuClassifyDto.setPid( entity.getPid() );
+        sysSkuClassifyDto.setRemark( entity.getRemark() );
+        sysSkuClassifyDto.setKeywords( entity.getKeywords() );
         sysSkuClassifyDto.setIsDelete( entity.getIsDelete() );
         sysSkuClassifyDto.setVersion( entity.getVersion() );
         sysSkuClassifyDto.setCreateTime( entity.getCreateTime() );
         sysSkuClassifyDto.setUpdateTime( entity.getUpdateTime() );
         sysSkuClassifyDto.setTopCompanyCode( entity.getTopCompanyCode() );
-        sysSkuClassifyDto.setId( entity.getId() );
-        sysSkuClassifyDto.setName( entity.getName() );
-        sysSkuClassifyDto.setEnabled( entity.getEnabled() );
-        sysSkuClassifyDto.setPid( entity.getPid() );
-        sysSkuClassifyDto.setRemark( entity.getRemark() );
-        sysSkuClassifyDto.setKeywords( entity.getKeywords() );
-
         return sysSkuClassifyDto;
     }
 

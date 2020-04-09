@@ -19,7 +19,7 @@ public class SysSkuClassifyDto extends BaseDTO {
     private Long id;
 
     private String name;
-
+    private String fullName;
     @NotNull
     private Boolean enabled;
 

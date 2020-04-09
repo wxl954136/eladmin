@@ -6,12 +6,12 @@ import java.io.Serializable;
 
 /**
 * @author lukeWang
-* @date 2020-04-10 16:32:18
+* @date 2020-6-10 16:32:18
 */
 @Data
-public class SysSkuClassifySmallDto implements Serializable {
+public class SysStoreSmallDto implements Serializable {
 
     private Long id;
+
     private String name;
-    private String fullName;
 }
