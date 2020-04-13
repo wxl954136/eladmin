@@ -1,8 +1,10 @@
 package me.luke.config;
 
 import me.luke.modules.system.domain.Dept;
+import me.luke.modules.system.domain.SysSkuClassify;
 import me.luke.modules.system.service.DeptService;
 import me.luke.modules.system.service.RoleService;
+import me.luke.modules.system.service.SysSkuClassifyService;
 import me.luke.modules.system.service.UserService;
 import me.luke.modules.system.service.dto.RoleSmallDto;
 import me.luke.modules.system.service.dto.UserDto;
@@ -29,10 +31,14 @@ public class DataScope {
 
     private final DeptService deptService;
 
-    public DataScope(UserService userService, RoleService roleService, DeptService deptService) {
+    private final SysSkuClassifyService sysSkuClassifyService;
+
+
+    public DataScope(UserService userService, RoleService roleService, DeptService deptService,SysSkuClassifyService sysSkuClassifyService) {
         this.userService = userService;
         this.roleService = roleService;
         this.deptService = deptService;
+        this.sysSkuClassifyService = sysSkuClassifyService;
     }
 
     public Set<Long> getDeptIds() {
@@ -72,6 +78,17 @@ public class DataScope {
     }
 
 
+    public Set<Long> getSkuClassifyIds() {
+
+
+
+        // 用于商品分类的id
+        Set<Long> sysClassifyIds = new HashSet<>();
+
+//        sysSkuClassifyService
+
+        return sysClassifyIds;
+    }
     public List<Long> getDeptChildren(List<Dept> deptList) {
         List<Long> list = new ArrayList<>();
         deptList.forEach(dept -> {
@@ -81,6 +98,22 @@ public class DataScope {
                             list.addAll(getDeptChildren(depts));
                         }
                         list.add(dept.getId());
+                    }
+                }
+        );
+        return list;
+    }
+    public List<Long> getSysSkuClassifyChildren(List<SysSkuClassify> sysSkuClassifyList) {
+
+
+        List<Long> list = new ArrayList<>();
+        sysSkuClassifyList.forEach(classify -> {
+                    if (classify!=null && classify.getEnabled()){
+                        List<SysSkuClassify> sysSkuClassifys = sysSkuClassifyService.findByPid(classify.getId());
+                        if(sysSkuClassifyList.size() != 0){
+                            list.addAll(getSysSkuClassifyChildren(sysSkuClassifys));
+                        }
+                        list.add(classify.getId());
                     }
                 }
         );

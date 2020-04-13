@@ -42,7 +42,7 @@
 
 	<repositories>
 		<repository>
-			<id>public</id>
+			<id>lic</id>
 			<name>aliyun nexus</name>
 			<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
 			<releases>

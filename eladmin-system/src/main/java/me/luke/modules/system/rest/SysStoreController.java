@@ -76,7 +76,6 @@ public class SysStoreController {
         criteria.setTopCompanyCode(jwtUser.getTopCompanyCode());
         Set<Long> deptSet = new HashSet<>();
         Set<Long> result = new HashSet<>();
-        System.out.println("luke:===" + criteria.getDeptId());
         if (!ObjectUtils.isEmpty(criteria.getDeptId())) {
             deptSet.add(criteria.getDeptId());
             deptSet.addAll(dataScope.getDeptChildren(deptService.findByPid(criteria.getDeptId())));
@@ -125,7 +124,7 @@ public class SysStoreController {
     }
 
     @Log("删除仓库")
-    @ApiOperation("删除仓库中")
+    @ApiOperation("删除仓库")
     @PreAuthorize("@el.check('sysStore:del')")
     @DeleteMapping
     public ResponseEntity<Object> deleteAll(@RequestBody Long[] ids) {

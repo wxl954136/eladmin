@@ -112,7 +112,7 @@ public class SysSkuClassifyServiceImpl implements SysSkuClassifyService {
     public SysSkuClassifyDto create(SysSkuClassify resources) {
         Optional<SysSkuClassify> sysSkuClassify = sysSkuClassifyRepository.findById(resources.getPid());
         sysSkuClassify.ifPresent(o->{
-            resources.setFullName(sysSkuClassify.get().getFullName() + "." + resources.getName());
+            resources.setFullName(sysSkuClassify.get().getFullName() + "." + resources.getName() + ".");
         });
         return sysSkuClassifyMapper.toDto(sysSkuClassifyRepository.save(resources));
     }
@@ -124,8 +124,25 @@ public class SysSkuClassifyServiceImpl implements SysSkuClassifyService {
         if(resources.getId().equals(resources.getPid())) {
             throw new BadRequestException("上级不能为自己");
         }
+
         SysSkuClassify sysSkuClassify = sysSkuClassifyRepository.findById(resources.getId()).orElseGet(SysSkuClassify::new);
         ValidationUtil.isNull( sysSkuClassify.getId(),"SysSkuClassify","id",resources.getId());
+        String oldFullName = "",newFullName = "";
+        if (resources.getPid() != 0 ){  //0表示顶层
+            //获取父层的full_name
+            SysSkuClassify parentClassify  = sysSkuClassifyRepository.findById(resources.getPid()).orElseGet(SysSkuClassify::new);
+            ValidationUtil.isNull( sysSkuClassify.getId(),"SysSkuClassify","id",resources.getId());
+            newFullName = parentClassify.getFullName() + resources.getName() + ".";
+            oldFullName = sysSkuClassify.getFullName();
+        }else
+        {
+            //当更新的是顶层时
+            oldFullName = sysSkuClassify.getName() + ".";
+            newFullName = resources.getName() + ".";
+        }
+        sysSkuClassifyRepository.updateFullNameAsEntity(oldFullName,newFullName,sysSkuClassify.getTopCompanyCode());
+
+        resources.setFullName(newFullName);  //更新当前更改记录的fullName
         resources.setId(sysSkuClassify.getId());
         sysSkuClassifyRepository.save(resources);
     }
@@ -139,7 +156,6 @@ public class SysSkuClassifyServiceImpl implements SysSkuClassifyService {
             sysSkuClassify.ifPresent(o->{
                 sysSkuClassify.get().setIsDelete(true);
                 sysSkuClassifyRepository.save(sysSkuClassify.get());
-
              //   throw new BadRequestException("禁止删除");
             });
         }

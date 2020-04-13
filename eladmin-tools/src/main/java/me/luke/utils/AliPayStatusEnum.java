@@ -9,6 +9,9 @@ public enum  AliPayStatusEnum {
 
     /** 交易成功 */
     FINISHED("交易成功", "TRADE_FINISHED"),
+//    WeekDay {
+//        1, 2, 3, 4
+//    },
 
     /** 支付成功 */
     SUCCESS("支付成功", "TRADE_SUCCESS"),

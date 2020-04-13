@@ -56,9 +56,6 @@ public class SysSkuClassifyController {
 
 
 
-
-
-
     public SysSkuClassifyController(SysSkuClassifyService sysSkuClassifyService, DataScope dataScope) {
         this.sysSkuClassifyService = sysSkuClassifyService;
         this.dataScope = dataScope;
@@ -79,7 +76,6 @@ public class SysSkuClassifyController {
     public ResponseEntity<Object> getSysSkuClassifys(SysSkuClassifyQueryCriteria criteria){
         // 数据权限
         //获取缓存方法示例
-
         JwtUser jwtUser = (JwtUser)redisUtils.get(request.getHeader("Authorization"));
        // criteria.setIds(dataScope.getSysSkuClassifyIds());
         criteria.setTopCompanyCode(jwtUser.getTopCompanyCode());
