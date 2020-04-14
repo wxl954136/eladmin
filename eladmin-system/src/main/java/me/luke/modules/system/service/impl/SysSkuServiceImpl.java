@@ -2,6 +2,7 @@ package me.luke.modules.system.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import me.luke.exception.BadRequestException;
+import me.luke.modules.system.domain.BaseQuery;
 import me.luke.modules.system.domain.SysSku;
 
 import me.luke.modules.system.domain.SysStore;
@@ -9,8 +10,6 @@ import me.luke.modules.system.repository.SysSkuRepository;
 import me.luke.modules.system.service.SysSkuService;
 import me.luke.modules.system.service.dto.SysSkuDto;
 import me.luke.modules.system.service.dto.SysSkuQueryCriteria;
-import me.luke.modules.system.service.dto.SysStoreDto;
-import me.luke.modules.system.service.dto.SysStoreQueryCriteria;
 import me.luke.modules.system.service.mapper.SysSkuMapper;
 import me.luke.utils.FileUtil;
 import me.luke.utils.PageUtil;
@@ -61,10 +60,24 @@ public class SysSkuServiceImpl implements SysSkuService {
 
     @Override
     @Cacheable
+    public List<Object> findAllByBrand(String ... data) {
+
+        return sysSkuRepository.findAllByBrand(data);
+    }
+
+    @Override
+    @Cacheable
+    public List<Object> findAllByColor(String ... data) {
+
+        return sysSkuRepository.findAllByColor(data);
+    }
+
+    @Override
+    @Cacheable
     public Map<String,Object> queryAll(SysSkuQueryCriteria criteria, Pageable pageable){
         Page<SysSku> page = sysSkuRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         return PageUtil.toPage(page.map(sysSkuMapper::toDto));
-    }
+}
 
     @Override
     @Cacheable(key = "#p0")

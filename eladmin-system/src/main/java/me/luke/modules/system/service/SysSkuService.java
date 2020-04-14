@@ -1,5 +1,6 @@
 package me.luke.modules.system.service;
 
+import me.luke.modules.system.domain.BaseQuery;
 import me.luke.modules.system.domain.SysSku;
 import me.luke.modules.system.service.dto.SysSkuDto;
 import me.luke.modules.system.service.dto.SysSkuQueryCriteria;
@@ -30,6 +31,17 @@ public interface SysSkuService {
      * @return /
      */
     List<SysSkuDto> queryAll(SysSkuQueryCriteria criteria);
+
+    /**
+     * 查询所有品牌数据
+     * @return /
+     */
+    List<Object> findAllByBrand(String ... data);
+    /**
+     * 查询所有颜色数据
+     * @return /
+     */
+    List<Object>  findAllByColor(String ... data);
 
     /**
      * 根据ID查询

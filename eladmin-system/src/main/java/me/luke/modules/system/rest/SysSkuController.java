@@ -1,10 +1,12 @@
 package me.luke.modules.system.rest;
 
+import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import me.luke.aop.log.Log;
 import me.luke.config.DataScope;
 import me.luke.modules.security.security.vo.JwtUser;
+import me.luke.modules.system.domain.BaseQuery;
 import me.luke.modules.system.domain.SysSku;
 import me.luke.modules.system.service.SysSkuClassifyService;
 import me.luke.modules.system.service.SysSkuService;
@@ -27,8 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
 * @author lukeWang
@@ -86,7 +87,34 @@ public class SysSkuController {
         criteria.setClassifyId(null);  //
         return new ResponseEntity<>(sysSkuService.queryAll(criteria,pageable),HttpStatus.OK);
     }
+    @GetMapping("/brands")
+    @Log("查询颜色")
+    @ApiOperation("查询颜色")
+    @PreAuthorize("@el.check()")
+    public ResponseEntity<Object> getBrands(){
+        JwtUser jwtUser = (JwtUser)redisUtils.get(request.getHeader("Authorization"));
+        List<Object> result = sysSkuService.findAllByBrand(jwtUser.getTopCompanyCode());
+        Map<String,Object> map = new LinkedHashMap<>(2);
+        List<BaseQuery> bqList = new ArrayList();
+        for(Object o :result)
+        {
+            BaseQuery val = new BaseQuery();
+            val.setValue(o.toString());  //elment ui 必须是ui才能模糊查询
+            bqList.add(val);
+        }
+        map.put("content",bqList);
+        map.put("totalElements",result.size());
+        return new ResponseEntity<>(map,HttpStatus.OK);
+    }
 
+    @GetMapping("/colors")
+    @Log("查询颜色")
+    @ApiOperation("查询颜色")
+    @PreAuthorize("@el.check()")
+    public ResponseEntity<Object> getColors(){
+        JwtUser jwtUser = (JwtUser)redisUtils.get(request.getHeader("Authorization"));
+        return new ResponseEntity<>(sysSkuService.findAllByColor(jwtUser.getTopCompanyCode()),HttpStatus.OK);
+    }
     @PostMapping
     @Log("新增仓库")
     @ApiOperation("新增仓库")
