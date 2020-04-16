@@ -92,7 +92,12 @@
             <artifactId>pinyin4j</artifactId>
             <version>2.5.1</version>
         </dependency>
-
+        <!--配置mybatis依赖  https://www.cnblogs.com/lkdirk/p/7079905.html-->
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>1.1.1</version>
+        </dependency>
 
     </dependencies>
 

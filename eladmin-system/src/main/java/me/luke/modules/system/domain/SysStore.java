@@ -20,8 +20,7 @@ import java.io.Serializable;
 */
 @Entity
 @Where(clause=" is_delete= 0  and 1=1 ") //必须是数据库字段，不可以是实体bean field
-@Getter
-@Setter
+@Data
 @Table(name="sys_store")
 
 @GenericGenerator(name = "jpa-uuid", strategy = "uuid")

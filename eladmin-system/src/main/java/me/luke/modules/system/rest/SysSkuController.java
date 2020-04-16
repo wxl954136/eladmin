@@ -1,18 +1,20 @@
 package me.luke.modules.system.rest;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import io.lettuce.core.ScriptOutputType;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import me.luke.aop.log.Log;
 import me.luke.config.DataScope;
 import me.luke.modules.security.security.vo.JwtUser;
-import me.luke.modules.system.domain.BaseQuery;
+import me.luke.modules.system.domain.vo.Assist;
 import me.luke.modules.system.domain.SysSku;
+import me.luke.modules.system.repository.SysSkuRepository;
 import me.luke.modules.system.service.SysSkuClassifyService;
 import me.luke.modules.system.service.SysSkuService;
 import me.luke.modules.system.service.dto.SysSkuDto;
 import me.luke.modules.system.service.dto.SysSkuQueryCriteria;
-import me.luke.utils.PageUtil;
+import me.luke.utils.CastEntity;
 import me.luke.utils.RedisUtils;
 import me.luke.utils.StringUtils;
 import me.luke.utils.UserUtil;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.util.*;
 
 /**
@@ -88,24 +91,18 @@ public class SysSkuController {
         return new ResponseEntity<>(sysSkuService.queryAll(criteria,pageable),HttpStatus.OK);
     }
     @GetMapping("/brands")
-    @Log("查询颜色")
-    @ApiOperation("查询颜色")
+    @Log("查询品牌")
+    @ApiOperation("查询品牌")
     @PreAuthorize("@el.check()")
-    public ResponseEntity<Object> getBrands(){
+    public ResponseEntity<Object> getBrands() throws Exception{
         JwtUser jwtUser = (JwtUser)redisUtils.get(request.getHeader("Authorization"));
-        List<Object> result = sysSkuService.findAllByBrand(jwtUser.getTopCompanyCode());
+        List<Assist> resultViews =  sysSkuService.findAllByBrand(jwtUser.getTopCompanyCode());
         Map<String,Object> map = new LinkedHashMap<>(2);
-        List<BaseQuery> bqList = new ArrayList();
-        for(Object o :result)
-        {
-            BaseQuery val = new BaseQuery();
-            val.setValue(o.toString());  //elment ui 必须是ui才能模糊查询
-            bqList.add(val);
-        }
-        map.put("content",bqList);
-        map.put("totalElements",result.size());
+        map.put("content",resultViews);
+        map.put("totalElements",resultViews.size());
         return new ResponseEntity<>(map,HttpStatus.OK);
     }
+
 
     @GetMapping("/colors")
     @Log("查询颜色")
@@ -113,11 +110,15 @@ public class SysSkuController {
     @PreAuthorize("@el.check()")
     public ResponseEntity<Object> getColors(){
         JwtUser jwtUser = (JwtUser)redisUtils.get(request.getHeader("Authorization"));
-        return new ResponseEntity<>(sysSkuService.findAllByColor(jwtUser.getTopCompanyCode()),HttpStatus.OK);
+        List<Assist> resultViews =  sysSkuService.findAllByColor(jwtUser.getTopCompanyCode());
+        Map<String,Object> map = new LinkedHashMap<>(2);
+        map.put("content",resultViews);
+        map.put("totalElements",resultViews.size());
+        return new ResponseEntity<>(map,HttpStatus.OK);
     }
     @PostMapping
-    @Log("新增仓库")
-    @ApiOperation("新增仓库")
+    @Log("新增商品")
+    @ApiOperation("新增商品")
     @PreAuthorize("@el.check('sysSku:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody SysSku resources){
         JwtUser jwtUser = (JwtUser) UserUtil.getLoginUser(redisUtils,request);

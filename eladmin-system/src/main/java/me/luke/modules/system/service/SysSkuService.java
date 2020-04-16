@@ -1,10 +1,9 @@
 package me.luke.modules.system.service;
 
-import me.luke.modules.system.domain.BaseQuery;
 import me.luke.modules.system.domain.SysSku;
+import me.luke.modules.system.domain.vo.Assist;
 import me.luke.modules.system.service.dto.SysSkuDto;
 import me.luke.modules.system.service.dto.SysSkuQueryCriteria;
-import me.luke.modules.system.service.dto.SysStoreQueryCriteria;
 import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletResponse;
@@ -36,12 +35,16 @@ public interface SysSkuService {
      * 查询所有品牌数据
      * @return /
      */
-    List<Object> findAllByBrand(String ... data);
+    List<Assist>  findAllByBrand(String ... data);
+/*
+    List<Assist>  findAllByBrands(String topCompanyCode);
+
+ */
     /**
      * 查询所有颜色数据
      * @return /
      */
-    List<Object>  findAllByColor(String ... data);
+    List<Assist>  findAllByColor(String ... data);
 
     /**
      * 根据ID查询

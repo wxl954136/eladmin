@@ -1,20 +1,17 @@
 package me.luke.modules.system.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import me.luke.exception.BadRequestException;
-import me.luke.modules.system.domain.BaseQuery;
 import me.luke.modules.system.domain.SysSku;
 
-import me.luke.modules.system.domain.SysStore;
+import me.luke.modules.system.domain.vo.Assist;
 import me.luke.modules.system.repository.SysSkuRepository;
 import me.luke.modules.system.service.SysSkuService;
 import me.luke.modules.system.service.dto.SysSkuDto;
 import me.luke.modules.system.service.dto.SysSkuQueryCriteria;
 import me.luke.modules.system.service.mapper.SysSkuMapper;
-import me.luke.utils.FileUtil;
-import me.luke.utils.PageUtil;
-import me.luke.utils.QueryHelp;
-import me.luke.utils.ValidationUtil;
+import me.luke.utils.*;
+import org.hibernate.SQLQuery;
+import org.hibernate.transform.Transformers;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -23,12 +20,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
 * @author lukeWang
@@ -44,7 +42,8 @@ public class SysSkuServiceImpl implements SysSkuService {
 
     private final SysSkuMapper sysSkuMapper;
 
-
+    @PersistenceContext
+    private EntityManager em;
 
 
     public SysSkuServiceImpl(SysSkuRepository sysSkuRepository, SysSkuMapper sysSkuMapper) {
@@ -60,16 +59,40 @@ public class SysSkuServiceImpl implements SysSkuService {
 
     @Override
     @Cacheable
-    public List<Object> findAllByBrand(String ... data) {
-
-        return sysSkuRepository.findAllByBrand(data);
+    public List<Assist> findAllByBrand(String ... data) {
+        try{
+            List<Object[]> result = sysSkuRepository.findAllByBrand(data);
+            List<Assist> resultView = CastEntity.castEntity(result, Assist.class);
+            return resultView;
+        }catch (Exception e){
+            return null;
+        }
     }
+/*
+    @Override
+    public List<Assist> findAllByBrands(String topCompanyCode) {
 
+
+//        Query query = em.createNativeQuery(sql.toString());
+//        query.unwrap(SQLQuery.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+
+        return sysSkuRepository.findAllByBrands(topCompanyCode);
+
+
+
+    }
+*/
     @Override
     @Cacheable
-    public List<Object> findAllByColor(String ... data) {
-
-        return sysSkuRepository.findAllByColor(data);
+    public List<Assist> findAllByColor(String ... data) {
+        try{
+            List<Object[]> result = sysSkuRepository.findAllByColor(data);
+            List<Assist> resultView = CastEntity.castEntity(result, Assist.class);
+            return resultView;
+        }catch (Exception e){
+            return null;
+        }
+      //  return sysSkuRepository.findAllByColor(data);
     }
 
     @Override
