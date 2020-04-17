@@ -22,7 +22,6 @@ import java.io.Serializable;
 @Where(clause=" is_delete= 0  and 1=1 ") //必须是数据库字段，不可以是实体bean field
 @Data
 @Table(name="sys_store")
-
 @GenericGenerator(name = "jpa-uuid", strategy = "uuid")
 public class SysStore extends BaseEntity  {
     /** ID */
@@ -63,31 +62,7 @@ public class SysStore extends BaseEntity  {
     private String remark;
 
 
-/*
-    @Column(name = "is_delete")
-    private Boolean isDelete;
 
-
-    @Column(name = "version")
-    private Integer version;
-
-
-    @Column(name = "update_time")
-    private Timestamp updateTime;
-
-
-    @Column(name = "create_time")
-    private Timestamp createTime;
-
-
-    @Column(name = "top_company_code")
-    private String topCompanyCode;
-
-
-    @Column(name = "notes")
-    private String notes;
-
-*/
 
     public void copy(SysStore source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

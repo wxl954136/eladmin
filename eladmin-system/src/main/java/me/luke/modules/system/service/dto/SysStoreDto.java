@@ -34,14 +34,4 @@ public class SysStoreDto extends  BaseDTO   {
     /** 备注 */
     private String remark;
 
-/*
-
-    private Boolean isDelete;
-    private Integer version;
-    private Timestamp updateTime;
-    private Timestamp createTime;
-    private String topCompanyCode;
-*/
- // 系统注释，不参与程序制作
-//    private String notes;
 }
