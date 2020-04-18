@@ -8,6 +8,7 @@ import me.luke.modules.system.service.dto.SysTraderSmallDto;
 import java.sql.Timestamp;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
 * @author lukeWang
@@ -43,6 +44,9 @@ public class BizPoInDto extends BaseDTO {
      */
     private Long storeId;
     private SysStoreSmallDto sysStore;
+
+    private List<BizPoInDetailDto> bizPoInDetails;
+
     /**
      * 付款方式:1/2/3
      */

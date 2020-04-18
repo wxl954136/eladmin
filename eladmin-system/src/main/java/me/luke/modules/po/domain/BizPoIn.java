@@ -13,6 +13,7 @@ import javax.validation.constraints.*;
 import java.sql.Timestamp;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
 * @author lukeWang
@@ -53,6 +54,8 @@ public class BizPoIn  extends BaseEntity {
     @JoinColumn(name = "store_id")
     private SysStore sysStore;
 
+    @OneToMany(mappedBy = "bizPoIn",cascade={CascadeType.PERSIST,CascadeType.REMOVE})
+    private List<BizPoInDetail> bizPoInDetails;
 
     /** 付款方式:1/2/3 */
     @Column(name = "pay_method")

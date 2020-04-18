@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 * @author lukeWang
 * @date 2020-04-17
 */
-@Api(tags = "poin管理")
+@Api(tags = "采购入库单管理")
 @RestController
 @RequestMapping("/api/bizPoIn")
 public class BizPoInController {
@@ -38,8 +38,8 @@ public class BizPoInController {
     }
 
     @GetMapping
-    @Log("查询poin")
-    @ApiOperation("查询poin")
+    @Log("查询采购入库单")
+    @ApiOperation("查询采购入库单")
     @PreAuthorize("@el.check('bizPoIn:list')")
     public ResponseEntity<Object> getBizPoIns(BizPoInQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(bizPoInService.queryAll(criteria,pageable),HttpStatus.OK);
