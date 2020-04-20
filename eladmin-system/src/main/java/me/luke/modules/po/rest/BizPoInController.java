@@ -45,6 +45,14 @@ public class BizPoInController {
         return new ResponseEntity<>(bizPoInService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
+    @GetMapping(value = "/test")
+    @Log("查询采购入库单")
+    @ApiOperation("查询采购入库单")
+    @PreAuthorize("@el.check('bizPoIn:list')")
+    public ResponseEntity<Object> getBizPoInById(){
+        return new ResponseEntity<>(bizPoInService.findById(1l),HttpStatus.OK);
+    }
+
     @PostMapping
     @Log("新增采购入库单")
     @ApiOperation("新增采购入库单")
