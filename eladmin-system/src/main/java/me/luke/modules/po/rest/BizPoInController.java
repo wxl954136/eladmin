@@ -3,6 +3,7 @@ package me.luke.modules.po.rest;
 import me.luke.aop.log.Log;
 import me.luke.modules.po.domain.BizPoIn;
 import me.luke.modules.po.service.BizPoInService;
+import me.luke.modules.po.service.dto.BizPoInDto;
 import me.luke.modules.po.service.dto.BizPoInQueryCriteria;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -44,13 +45,20 @@ public class BizPoInController {
     public ResponseEntity<Object> getBizPoIns(BizPoInQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(bizPoInService.queryAll(criteria,pageable),HttpStatus.OK);
     }
-
-    @GetMapping(value = "/test")
+    @GetMapping(value = "/get/{poId}")
     @Log("查询采购入库单")
     @ApiOperation("查询采购入库单")
     @PreAuthorize("@el.check('bizPoIn:list')")
-    public ResponseEntity<Object> getBizPoInById(){
-        return new ResponseEntity<>(bizPoInService.findById(1l),HttpStatus.OK);
+    public ResponseEntity<Object> getBizPoInById(@PathVariable String poId){
+        BizPoInDto data = new BizPoInDto();
+        if (Long.parseLong(poId) <=0)
+        {
+            data.setId(-1l);//-1表示新增
+        }else
+        {
+            data = bizPoInService.findById(Long.parseLong(poId));
+        }
+        return new ResponseEntity<>(data,HttpStatus.OK);
     }
 
     @PostMapping
