@@ -54,6 +54,8 @@ public class BizPoInController {
         if (Long.parseLong(poId) <=0)
         {
             data.setId(-1l);//-1表示新增
+            return null;
+
         }else
         {
             data = bizPoInService.findById(Long.parseLong(poId));

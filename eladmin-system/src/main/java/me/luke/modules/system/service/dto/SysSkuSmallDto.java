@@ -14,5 +14,6 @@ public class SysSkuSmallDto implements Serializable {
     private Long id;
 
     private String fullName;
+    private Boolean costFlag;
 
 }
