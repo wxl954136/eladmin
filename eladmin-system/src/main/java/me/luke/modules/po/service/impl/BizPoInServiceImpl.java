@@ -1,6 +1,12 @@
 package me.luke.modules.po.service.impl;
 
+import cn.hutool.core.lang.Snowflake;
+import cn.hutool.core.util.IdUtil;
+import me.luke.aspect.LimitAspect;
 import me.luke.modules.po.domain.BizPoIn;
+import me.luke.modules.po.domain.BizPoInDetail;
+import me.luke.modules.po.repository.BizPoInDetailRepository;
+import me.luke.modules.po.service.BizPoInDetailService;
 import me.luke.utils.ValidationUtil;
 import me.luke.utils.FileUtil;
 import me.luke.modules.po.repository.BizPoInRepository;
@@ -8,6 +14,9 @@ import me.luke.modules.po.service.BizPoInService;
 import me.luke.modules.po.service.dto.BizPoInDto;
 import me.luke.modules.po.service.dto.BizPoInQueryCriteria;
 import me.luke.modules.po.service.mapper.BizPoInMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,13 +43,16 @@ import java.util.LinkedHashMap;
 //@CacheConfig(cacheNames = "bizPoIn")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class BizPoInServiceImpl implements BizPoInService {
-
+    private static final Logger logger = LoggerFactory.getLogger(BizPoInServiceImpl.class);
     private final BizPoInRepository bizPoInRepository;
-
+    private final BizPoInDetailRepository bizPoInDetailRepository;
+    private final BizPoInDetailService bizPoInDetailService;
     private final BizPoInMapper bizPoInMapper;
 
-    public BizPoInServiceImpl(BizPoInRepository bizPoInRepository, BizPoInMapper bizPoInMapper) {
+    public BizPoInServiceImpl(BizPoInRepository bizPoInRepository, BizPoInDetailRepository bizPoInDetailRepository ,BizPoInDetailService bizPoInDetailService,BizPoInMapper bizPoInMapper) {
         this.bizPoInRepository = bizPoInRepository;
+        this.bizPoInDetailRepository = bizPoInDetailRepository;
+        this.bizPoInDetailService = bizPoInDetailService;
         this.bizPoInMapper = bizPoInMapper;
     }
 
@@ -77,9 +89,28 @@ public class BizPoInServiceImpl implements BizPoInService {
     @Transactional(rollbackFor = Exception.class)
     public void update(BizPoIn resources) {
         BizPoIn bizPoIn = bizPoInRepository.findById(resources.getId()).orElseGet(BizPoIn::new);
+
         ValidationUtil.isNull( bizPoIn.getId(),"BizPoIn","id",resources.getId());
+
         bizPoIn.copy(resources);
+
+       // bizPoInDetailRepository.save(bizPoIn.getBizPoInDetails());
+        for (BizPoInDetail detail : resources.getBizPoInDetails())
+        {
+            logger.info("lukeWang:新增记录--------"  );
+            detail.setKeywords(IdUtil.simpleUUID());
+            detail.setBizPoIn(resources);
+            detail.copy(detail);  //使其给到类序列化对象
+            if (null == detail.getId()  || detail.getId() <=0){
+                bizPoInDetailService.create(detail);
+            }else {
+                bizPoInDetailService.update(detail);
+            }
+          //  bizPoInDetailRepository.save(detail);
+
+        }
         bizPoInRepository.save(bizPoIn);
+
     }
 
     @Override

@@ -3,6 +3,8 @@ package me.luke.modules.po.domain;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import lombok.ToString;
+import me.luke.modules.system.domain.DictDetail;
 import me.luke.modules.system.domain.SysSku;
 
 import javax.persistence.*;
@@ -17,19 +19,28 @@ import java.io.Serializable;
 */
 @Entity
 @Data
+//关联子对象千万不能toString,要排除，否则报错
+@ToString(exclude={"bizPoIn","sysSku"})
 @Table(name="biz_po_in_detail")
 public class BizPoInDetail implements Serializable {
 
     /** 采购单明细表id */
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull(groups = BizPoInDetail.Update.class)
     @Column(name = "id")
+
     private Long id;
 
+    @Column(name = "keywords")
+    private String keywords ;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "head_id")
     private BizPoIn bizPoIn;
 
+    @Column(name = "biz_type")
+    private String bizType = "PI";
 
 
     @OneToOne
@@ -76,6 +87,8 @@ public class BizPoInDetail implements Serializable {
     /** 系统注释，不参与程序制作 */
     @Column(name = "notes")
     private String notes;
+
+    public @interface Update {}
 
     public void copy(BizPoInDetail source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

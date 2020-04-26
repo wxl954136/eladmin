@@ -3,6 +3,7 @@ package me.luke.modules.po.domain;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import lombok.ToString;
 import me.luke.base.BaseEntity;
 import me.luke.modules.system.domain.SysStore;
 import me.luke.modules.system.domain.SysTrader;
@@ -21,6 +22,8 @@ import java.util.List;
 */
 @Entity
 @Data
+//关联子对象千万不能toString,要排除，否则报错
+@ToString(exclude={"sysTrader","sysTrader","sysStore","bizPoInDetails"})
 @Table(name="biz_po_in")
 public class BizPoIn  extends BaseEntity {
 
@@ -37,7 +40,7 @@ public class BizPoIn  extends BaseEntity {
     private String bizType = SysStatusEnum.BIZ_NOTE_TYPE_PO_PI.getValue();
 
     @Column(name = "biz_date")
-    private LocalDate bizDate;
+    private String bizDate;
 
     @Column(name = "keywords")
     private String keywords;

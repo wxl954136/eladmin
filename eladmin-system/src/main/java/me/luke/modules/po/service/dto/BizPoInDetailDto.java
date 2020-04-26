@@ -19,9 +19,11 @@ public class BizPoInDetailDto implements Serializable {
     /** 防止精度丢失 */
     @JsonSerialize(using= ToStringSerializer.class)
     private Long id;
-
+    private String keywords ;
     /** 主表关联 */
     private Long headId;
+
+    private String bizType = "PI";
 
     private SysSkuSmallDto sysSku;
 

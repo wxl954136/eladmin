@@ -28,7 +28,7 @@ public class BizPoInDto extends BaseDTO {
     /**
      * 单据日期
      */
-    private LocalDate bizDate;
+    private String bizDate;
 
     /**
      *  辅助key

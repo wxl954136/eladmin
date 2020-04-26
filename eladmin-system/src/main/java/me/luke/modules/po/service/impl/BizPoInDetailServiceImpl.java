@@ -71,8 +71,8 @@ public class BizPoInDetailServiceImpl implements BizPoInDetailService {
     //@CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public BizPoInDetailDto create(BizPoInDetail resources) {
-        Snowflake snowflake = IdUtil.createSnowflake(1, 1);
-        resources.setId(snowflake.nextId()); 
+       // Snowflake snowflake = IdUtil.createSnowflake(1, 1);
+      //  resources.setId(snowflake.nextId());
         return bizPoInDetailMapper.toDto(bizPoInDetailRepository.save(resources));
     }
 
@@ -100,7 +100,6 @@ public class BizPoInDetailServiceImpl implements BizPoInDetailService {
         for (BizPoInDetailDto bizPoInDetail : all) {
             Map<String,Object> map = new LinkedHashMap<>();
             map.put("主表关联", bizPoInDetail.getHeadId());
-
             map.put("数量", bizPoInDetail.getQty());
             map.put("采购价", bizPoInDetail.getPrice());
             map.put("税率", bizPoInDetail.getRate());

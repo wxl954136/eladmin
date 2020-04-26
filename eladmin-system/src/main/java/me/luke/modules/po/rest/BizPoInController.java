@@ -2,9 +2,12 @@ package me.luke.modules.po.rest;
 
 import me.luke.aop.log.Log;
 import me.luke.modules.po.domain.BizPoIn;
+import me.luke.modules.po.domain.BizPoInDetail;
 import me.luke.modules.po.service.BizPoInService;
 import me.luke.modules.po.service.dto.BizPoInDto;
 import me.luke.modules.po.service.dto.BizPoInQueryCriteria;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping("/api/bizPoIn")
 public class BizPoInController {
+    private static final Logger logger = LoggerFactory.getLogger(BizPoInController.class);
 
     private final BizPoInService bizPoInService;
 
@@ -55,7 +59,6 @@ public class BizPoInController {
         {
             data.setId(-1l);//-1表示新增
             return null;
-
         }else
         {
             data = bizPoInService.findById(Long.parseLong(poId));
@@ -76,8 +79,11 @@ public class BizPoInController {
     @ApiOperation("修改采购入库单")
     @PreAuthorize("@el.check('bizPoIn:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody BizPoIn resources){
+
+
         bizPoInService.update(resources);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+       // return new ResponseEntity<>(genConfigService.update(genConfig.getTableName(), genConfig),HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Log("删除采购入库单")

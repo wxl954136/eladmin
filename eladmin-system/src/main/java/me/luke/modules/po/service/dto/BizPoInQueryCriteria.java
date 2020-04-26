@@ -25,7 +25,7 @@ public class BizPoInQueryCriteria{
     private Integer status;
 
     @Query(type = Query.Type.BETWEEN)
-    private List<LocalDate> bizDate;
+    private List<String> bizDate;
 
     @Query(propName = "id", joinName = "trader")
     private Long traderId;
