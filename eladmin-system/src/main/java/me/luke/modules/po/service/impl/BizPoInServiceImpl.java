@@ -7,8 +7,7 @@ import me.luke.modules.po.domain.BizPoIn;
 import me.luke.modules.po.domain.BizPoInDetail;
 import me.luke.modules.po.repository.BizPoInDetailRepository;
 import me.luke.modules.po.service.BizPoInDetailService;
-import me.luke.utils.ValidationUtil;
-import me.luke.utils.FileUtil;
+import me.luke.utils.*;
 import me.luke.modules.po.repository.BizPoInRepository;
 import me.luke.modules.po.service.BizPoInService;
 import me.luke.modules.po.service.dto.BizPoInDto;
@@ -26,8 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 //import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import me.luke.utils.PageUtil;
-import me.luke.utils.QueryHelp;
+
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 import java.io.IOException;
@@ -78,9 +77,38 @@ public class BizPoInServiceImpl implements BizPoInService {
     }
 
     @Override
+    public BizPoInDto findLastBizNote() {
+        BizPoIn bizPoIn = bizPoInRepository.findLastBizNote();
+        if (bizPoIn == null) return null;
+        return bizPoInMapper.toDto(bizPoIn);
+    }
+
+    @Override
     //@CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public BizPoInDto create(BizPoIn resources) {
+        String bizNoPrefix = SystemUtil.getBizNoteNo(SysStatusEnum.BIZ_NOTE_TYPE_PO_PI.getValue());
+        BizPoIn lastBizPoIn = bizPoInRepository.findLastBizNote();
+        if (lastBizPoIn != null)
+        {
+            String tMaxBizNo = lastBizPoIn.getBizNo();
+            int iSerial = Integer.parseInt(tMaxBizNo.split("-")[1]);
+            DecimalFormat df=new DecimalFormat("0000");
+            String sSerial=df.format(++iSerial);
+            resources.setBizNo(bizNoPrefix + "-" + sSerial);  //单据编号
+        }else
+        {
+            resources.setBizNo(bizNoPrefix + "-0001");  //单据编号
+        }
+
+        for (BizPoInDetail detail : resources.getBizPoInDetails())
+        {
+                detail.setKeywords(IdUtil.simpleUUID());
+                //lukeWang:本例做为东西，每个程序都防此无论前端是否给值
+                detail.setVersion(0);
+                detail.setTopCompanyCode(resources.getTopCompanyCode());
+                detail.setBizPoIn(resources);
+        }
         return bizPoInMapper.toDto(bizPoInRepository.save(resources));
     }
 
@@ -89,15 +117,12 @@ public class BizPoInServiceImpl implements BizPoInService {
     @Transactional(rollbackFor = Exception.class)
     public void update(BizPoIn resources) {
         BizPoIn bizPoIn = bizPoInRepository.findById(resources.getId()).orElseGet(BizPoIn::new);
-
         ValidationUtil.isNull( bizPoIn.getId(),"BizPoIn","id",resources.getId());
-
         bizPoIn.copy(resources);
-
        // bizPoInDetailRepository.save(bizPoIn.getBizPoInDetails());
         for (BizPoInDetail detail : resources.getBizPoInDetails())
         {
-            logger.info("lukeWang:新增记录--------"  );
+            logger.info("lukeWang:新增采购记录记录--------"  );
             detail.setKeywords(IdUtil.simpleUUID());
             detail.setBizPoIn(resources);
             detail.copy(detail);  //使其给到类序列化对象

@@ -4,6 +4,7 @@ import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import lombok.ToString;
+import me.luke.base.BaseEntity;
 import me.luke.modules.system.domain.DictDetail;
 import me.luke.modules.system.domain.SysSku;
 
@@ -22,15 +23,15 @@ import java.io.Serializable;
 //关联子对象千万不能toString,要排除，否则报错
 @ToString(exclude={"bizPoIn","sysSku"})
 @Table(name="biz_po_in_detail")
-public class BizPoInDetail implements Serializable {
+public class BizPoInDetail extends BaseEntity {
 
     /** 采购单明细表id */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull(groups = BizPoInDetail.Update.class)
     @Column(name = "id")
-
     private Long id;
+
 
     @Column(name = "keywords")
     private String keywords ;
@@ -60,33 +61,6 @@ public class BizPoInDetail implements Serializable {
     @Column(name = "rate")
     private BigDecimal rate;
 
-    /** 备注 */
-    @Column(name = "remark")
-    private String remark;
-
-    /** 删除标记 */
-    @Column(name = "is_delete")
-    private Boolean isDelete;
-
-    /** 版本号 */
-    @Column(name = "version")
-    private Integer version;
-
-    /** 修改日期 */
-    @Column(name = "update_time")
-    private Timestamp updateTime;
-
-    /** 创建日期 */
-    @Column(name = "create_time")
-    private Timestamp createTime;
-
-    /** 企业代码 */
-    @Column(name = "top_company_code")
-    private String topCompanyCode;
-
-    /** 系统注释，不参与程序制作 */
-    @Column(name = "notes")
-    private String notes;
 
     public @interface Update {}
 

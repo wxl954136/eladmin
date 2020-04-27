@@ -6,8 +6,11 @@ import me.luke.modules.po.domain.BizPoInDetail;
 import me.luke.modules.po.service.BizPoInService;
 import me.luke.modules.po.service.dto.BizPoInDto;
 import me.luke.modules.po.service.dto.BizPoInQueryCriteria;
+import me.luke.modules.security.security.vo.JwtUser;
+import me.luke.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -27,6 +31,11 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/api/bizPoIn")
 public class BizPoInController {
     private static final Logger logger = LoggerFactory.getLogger(BizPoInController.class);
+    @Autowired
+    private RedisUtils redisUtils;
+
+    @Autowired
+    private HttpServletRequest request;
 
     private final BizPoInService bizPoInService;
 
@@ -71,6 +80,13 @@ public class BizPoInController {
     @ApiOperation("新增采购入库单")
     @PreAuthorize("@el.check('bizPoIn:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody BizPoIn resources){
+        JwtUser jwtUser = (JwtUser) UserUtil.getLoginUser(redisUtils,request);
+        resources.setTopCompanyCode(jwtUser.getTopCompanyCode());
+        resources.setKeywords(StringUtils.getUUID(resources.getKeywords()));
+        resources.setBizType(SysStatusEnum.BIZ_NOTE_TYPE_PO_PI.getValue());
+
+
+
         return new ResponseEntity<>(bizPoInService.create(resources),HttpStatus.CREATED);
     }
 
@@ -79,7 +95,6 @@ public class BizPoInController {
     @ApiOperation("修改采购入库单")
     @PreAuthorize("@el.check('bizPoIn:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody BizPoIn resources){
-
 
         bizPoInService.update(resources);
        // return new ResponseEntity<>(genConfigService.update(genConfig.getTableName(), genConfig),HttpStatus.OK);

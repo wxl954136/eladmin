@@ -70,7 +70,6 @@ public class BizPoIn  extends BaseEntity {
 
     /** 备注 */
     @Column(name = "remark",nullable = false)
-    @NotBlank
     private String remark;
 
 
