@@ -38,7 +38,7 @@ public interface BizPoInService {
     BizPoInDto findById(Long id);
 
     /**
-     * 产生单据号码，最后一条单据的号码进行累加
+     * 产生单据号码，最后一条单s据的号码进行累加
      * @return BizPoInDto
      */
     BizPoInDto findLastBizNote();
