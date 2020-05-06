@@ -109,7 +109,7 @@ public class BizPoInDetailServiceImpl implements BizPoInDetailService {
             map.put("修改日期", bizPoInDetail.getUpdateTime());
             map.put("创建日期", bizPoInDetail.getCreateTime());
             map.put("企业代码", bizPoInDetail.getTopCompanyCode());
-            map.put("系统注释，不参与程序制作", bizPoInDetail.getNotes());
+
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

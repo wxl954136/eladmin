@@ -4,8 +4,11 @@ import lombok.Data;
 import java.sql.Timestamp;
 import java.math.BigDecimal;
 import java.io.Serializable;
+import java.util.List;
+
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import me.luke.base.BaseDTO;
 import me.luke.modules.system.service.dto.SysSkuSmallDto;
 
 /**
@@ -13,7 +16,7 @@ import me.luke.modules.system.service.dto.SysSkuSmallDto;
 * @date 2020-04-18
 */
 @Data
-public class BizPoInDetailDto implements Serializable {
+public class BizPoInDetailDto extends BaseDTO {
 
     /** 采购单明细表id */
     /** 防止精度丢失 */
@@ -27,6 +30,8 @@ public class BizPoInDetailDto implements Serializable {
 
     private SysSkuSmallDto sysSku;
 
+    private List<BizTradeSerialFlowDto> bizTradeSerialFlow;
+
     /** 数量 */
     private BigDecimal qty;
 
@@ -39,21 +44,5 @@ public class BizPoInDetailDto implements Serializable {
     /** 备注 */
     private String remark;
 
-    /** 删除标记 */
-    private Boolean isDelete;
 
-    /** 版本号 */
-    private Integer version;
-
-    /** 修改日期 */
-    private Timestamp updateTime;
-
-    /** 创建日期 */
-    private Timestamp createTime;
-
-    /** 企业代码 */
-    private String topCompanyCode;
-
-    /** 系统注释，不参与程序制作 */
-    private String notes;
 }

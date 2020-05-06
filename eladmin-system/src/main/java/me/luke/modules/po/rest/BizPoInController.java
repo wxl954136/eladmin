@@ -2,8 +2,9 @@ package me.luke.modules.po.rest;
 
 import me.luke.aop.log.Log;
 import me.luke.modules.po.domain.BizPoIn;
-import me.luke.modules.po.domain.BizPoInDetail;
 import me.luke.modules.po.service.BizPoInService;
+import me.luke.modules.po.service.BizTradeSerialFlowService;
+import me.luke.modules.po.service.dto.BizPoInDetailDto;
 import me.luke.modules.po.service.dto.BizPoInDto;
 import me.luke.modules.po.service.dto.BizPoInQueryCriteria;
 import me.luke.modules.security.security.vo.JwtUser;
@@ -38,9 +39,11 @@ public class BizPoInController {
     private HttpServletRequest request;
 
     private final BizPoInService bizPoInService;
+    private final BizTradeSerialFlowService bizTradeSerialFlowService;
 
-    public BizPoInController(BizPoInService bizPoInService) {
+    public BizPoInController(BizPoInService bizPoInService, BizTradeSerialFlowService bizTradeSerialFlowService) {
         this.bizPoInService = bizPoInService;
+        this.bizTradeSerialFlowService = bizTradeSerialFlowService;
     }
 
     @Log("导出数据")
@@ -62,15 +65,22 @@ public class BizPoInController {
     @Log("查询采购入库单")
     @ApiOperation("查询采购入库单")
     @PreAuthorize("@el.check('bizPoIn:list')")
-    public ResponseEntity<Object> getBizPoInById(@PathVariable String poId){
+    public ResponseEntity<Object> getBizPoInById(@PathVariable String poId) {
         BizPoInDto data = new BizPoInDto();
-        if (Long.parseLong(poId) <=0)
-        {
+        if (Long.parseLong(poId) <= 0) {
             data.setId(-1l);//-1表示新增
             return null;
-        }else
-        {
+        } else {
             data = bizPoInService.findById(Long.parseLong(poId));
+            //查找复合主键映射方法
+            //注意获取串号明细表
+            if (data.getBizPoInDetails() != null && data.getBizPoInDetails().size() > 0) {
+                for (BizPoInDetailDto detailDto : data.getBizPoInDetails()) {
+                    if (detailDto.getSysSku().getCostFlag()) {
+                        detailDto.setBizTradeSerialFlow(bizTradeSerialFlowService.findByBizDetailKeywords(detailDto.getKeywords(), SysStatusEnum.BIZ_NOTE_TYPE_PO_PI.getValue()));
+                    }
+                }
+            }
         }
         return new ResponseEntity<>(data,HttpStatus.OK);
     }
@@ -84,9 +94,6 @@ public class BizPoInController {
         resources.setTopCompanyCode(jwtUser.getTopCompanyCode());
         resources.setKeywords(StringUtils.getUUID(resources.getKeywords()));
         resources.setBizType(SysStatusEnum.BIZ_NOTE_TYPE_PO_PI.getValue());
-
-
-
         return new ResponseEntity<>(bizPoInService.create(resources),HttpStatus.CREATED);
     }
 

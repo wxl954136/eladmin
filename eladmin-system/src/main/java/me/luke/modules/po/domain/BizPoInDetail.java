@@ -13,6 +13,7 @@ import javax.validation.constraints.*;
 import java.sql.Timestamp;
 import java.math.BigDecimal;
 import java.io.Serializable;
+import java.util.List;
 
 /**
 * @author lukeWang
@@ -28,7 +29,6 @@ public class BizPoInDetail extends BaseEntity {
     /** 采购单明细表id */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull(groups = BizPoInDetail.Update.class)
     @Column(name = "id")
     private Long id;
 
@@ -39,6 +39,10 @@ public class BizPoInDetail extends BaseEntity {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "head_id")
     private BizPoIn bizPoIn;
+
+   // @OneToMany(mappedBy = "bizTradeSerialFlow",cascade={CascadeType.PERSIST,CascadeType.REMOVE})
+    @Transient  //忽略字段映射，手动指定其指，因为此表是个集合表
+    private List<BizTradeSerialFlow> bizTradeSerialFlow;
 
     @Column(name = "biz_type")
     private String bizType = "PI";
