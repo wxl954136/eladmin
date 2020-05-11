@@ -20,6 +20,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -69,6 +71,7 @@ public class BizPoInController {
         BizPoInDto data = new BizPoInDto();
         if (Long.parseLong(poId) <= 0) {
             data.setId(-1l);//-1表示新增
+
             return null;
         } else {
             data = bizPoInService.findById(Long.parseLong(poId));
@@ -92,7 +95,7 @@ public class BizPoInController {
     public ResponseEntity<Object> create(@Validated @RequestBody BizPoIn resources){
         JwtUser jwtUser = (JwtUser) UserUtil.getLoginUser(redisUtils,request);
         resources.setTopCompanyCode(jwtUser.getTopCompanyCode());
-        resources.setKeywords(StringUtils.getUUID(resources.getKeywords()));
+      //  resources.setKeywords(StringUtils.getUUID(resources.getKeywords()));
         resources.setBizType(SysStatusEnum.BIZ_NOTE_TYPE_PO_PI.getValue());
         return new ResponseEntity<>(bizPoInService.create(resources),HttpStatus.CREATED);
     }
@@ -113,7 +116,13 @@ public class BizPoInController {
     @PreAuthorize("@el.check('bizPoIn:del')")
     @DeleteMapping
     public ResponseEntity<Object> deleteAll(@RequestBody Long[] ids) {
-        bizPoInService.deleteAll(ids);
+        Set<BizPoInDto> bizPoInDtos = new HashSet<>();
+        for(Long id:ids){
+            bizPoInDtos.add(bizPoInService.findById(id));
+        }
+        bizPoInService.deleteAll(bizPoInDtos);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
 }

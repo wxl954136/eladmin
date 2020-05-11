@@ -1,10 +1,9 @@
 package me.luke.modules.system.repository;
 
 
-import io.lettuce.core.dynamic.annotation.Param;
+
 import me.luke.modules.system.domain.SysSku;
-import me.luke.modules.system.domain.vo.Assist;
-import org.springframework.cache.annotation.Cacheable;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;

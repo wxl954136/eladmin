@@ -7,13 +7,18 @@ import lombok.ToString;
 import me.luke.base.BaseEntity;
 import me.luke.modules.system.domain.DictDetail;
 import me.luke.modules.system.domain.SysSku;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.math.BigDecimal;
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Objects;
 
 /**
 * @author lukeWang
@@ -21,6 +26,7 @@ import java.util.List;
 */
 @Entity
 @Data
+@Where(clause=" is_delete= 0  and 1=1 ")
 //关联子对象千万不能toString,要排除，否则报错
 @ToString(exclude={"bizPoIn","sysSku"})
 @Table(name="biz_po_in_detail")
@@ -65,10 +71,29 @@ public class BizPoInDetail extends BaseEntity {
     @Column(name = "rate")
     private BigDecimal rate;
 
+    /** 备注 */
+    @Column(name = "remark")
+    private String remark;
+
 
     public @interface Update {}
 
     public void copy(BizPoInDetail source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }
+
+    @Override
+    public String toString() {
+
+        return "BizPoInDetail [" +
+                "id=" + id + ", " +
+                "keywords=" + keywords +  ", " +
+                "sysSku.id=" + (sysSku == null?"":sysSku.getId())   + ", " +
+                "qty=" + Double.parseDouble(qty.toString())   + ", " +
+                "price=" + Double.parseDouble(price.toString())   + ", " +
+                "rate=" + Double.parseDouble(rate.toString())   + ", " +
+                "remark=" + remark  +
+                "]";
+    }
+
 }

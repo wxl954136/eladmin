@@ -8,12 +8,11 @@ import me.luke.base.BaseEntity;
 import me.luke.modules.system.domain.SysStore;
 import me.luke.modules.system.domain.SysTrader;
 import me.luke.utils.SysStatusEnum;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
-import java.sql.Timestamp;
-import java.io.Serializable;
-import java.time.LocalDate;
+
+
 import java.util.List;
 
 /**
@@ -23,6 +22,8 @@ import java.util.List;
 @Entity
 @Data
 //关联子对象千万不能toString,要排除，否则报错
+@Where(clause=" is_delete= 0  and 1=1 ")
+
 @ToString(exclude={"sysTrader","sysTrader","sysStore","bizPoInDetails"})
 @Table(name="biz_po_in")
 public class BizPoIn  extends BaseEntity {

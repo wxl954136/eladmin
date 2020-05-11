@@ -4,18 +4,23 @@ import lombok.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
+
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.lang.reflect.Field;
+import java.text.DecimalFormat;
 
 /**
  * @author luke wang
  * @Date 2020年3月23日10:00:03
  * @Remark 赤壁悠易科技有限公司
  */
+
 @Getter
 @Setter
 @MappedSuperclass
@@ -42,7 +47,6 @@ public class BaseEntity implements Serializable {
     /** 企业代码 */
     @Column(name = "top_company_code")
     private String topCompanyCode;
-
 
 
     public @interface Update {}

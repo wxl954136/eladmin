@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Map;
 import java.util.List;
 import java.io.IOException;
+import java.util.Set;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -60,6 +61,14 @@ public interface BizPoInService {
     * @param ids /
     */
     void deleteAll(Long[] ids);
+
+    /**
+     * 删除
+     * @param bizPoinDtos /
+     *
+     */
+    void deleteAll(Set<BizPoInDto> bizPoinDtos);
+
 
     /**
     * 导出数据

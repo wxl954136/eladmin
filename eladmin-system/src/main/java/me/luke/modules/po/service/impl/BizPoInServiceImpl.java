@@ -1,12 +1,14 @@
 package me.luke.modules.po.service.impl;
 
 import cn.hutool.core.util.IdUtil;
+import me.luke.exception.BadRequestException;
 import me.luke.modules.po.domain.BizPoIn;
 import me.luke.modules.po.domain.BizPoInDetail;
 import me.luke.modules.po.repository.BizPoInDetailRepository;
 import me.luke.modules.po.repository.BizPoInRepository;
 import me.luke.modules.po.service.BizPoInDetailService;
 import me.luke.modules.po.service.BizPoInService;
+import me.luke.modules.po.service.BizTradeSerialFlowService;
 import me.luke.modules.po.service.dto.BizPoInDto;
 import me.luke.modules.po.service.dto.BizPoInQueryCriteria;
 import me.luke.modules.po.service.mapper.BizPoInMapper;
@@ -22,10 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 // 默认不使用缓存
 //import org.springframework.cache.annotation.CacheConfig;
@@ -41,15 +40,17 @@ import java.util.Map;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class BizPoInServiceImpl implements BizPoInService {
     private static final Logger logger = LoggerFactory.getLogger(BizPoInServiceImpl.class);
-    private final BizPoInRepository bizPoInRepository;
+    private BizPoInRepository bizPoInRepository;
     private final BizPoInDetailRepository bizPoInDetailRepository;
     private final BizPoInDetailService bizPoInDetailService;
+    private final BizTradeSerialFlowService bizTradeSerialFlowService;
     private final BizPoInMapper bizPoInMapper;
 
-    public BizPoInServiceImpl(BizPoInRepository bizPoInRepository, BizPoInDetailRepository bizPoInDetailRepository, BizPoInDetailService bizPoInDetailService, BizPoInMapper bizPoInMapper) {
+    public BizPoInServiceImpl(BizPoInRepository bizPoInRepository, BizPoInDetailRepository bizPoInDetailRepository, BizPoInDetailService bizPoInDetailService, BizTradeSerialFlowService bizTradeSerialFlowService, BizPoInMapper bizPoInMapper) {
         this.bizPoInRepository = bizPoInRepository;
         this.bizPoInDetailRepository = bizPoInDetailRepository;
         this.bizPoInDetailService = bizPoInDetailService;
+        this.bizTradeSerialFlowService = bizTradeSerialFlowService;
         this.bizPoInMapper = bizPoInMapper;
     }
 
@@ -99,7 +100,7 @@ public class BizPoInServiceImpl implements BizPoInService {
 
         for (BizPoInDetail detail : resources.getBizPoInDetails()) {
             detail.setKeywords(IdUtil.simpleUUID());
-            //lukeWang:本例做为东西，每个程序都防此无论前端是否给值
+            //lukeWang:本例做为范例，每个程序都防此无论前端是否给值
             detail.setVersion(0);
             detail.setTopCompanyCode(resources.getTopCompanyCode());
             detail.setBizPoIn(resources);
@@ -113,30 +114,74 @@ public class BizPoInServiceImpl implements BizPoInService {
     public void update(BizPoIn resources) {
         BizPoIn bizPoIn = bizPoInRepository.findById(resources.getId()).orElseGet(BizPoIn::new);
         ValidationUtil.isNull(bizPoIn.getId(), "BizPoIn", "id", resources.getId());
-        bizPoIn.copy(resources);
-        // bizPoInDetailRepository.save(bizPoIn.getBizPoInDetails());
-        for (BizPoInDetail detail : resources.getBizPoInDetails()) {
-            logger.info("lukeWang:新增采购记录记录--------");
-            detail.setKeywords(IdUtil.simpleUUID());
-            detail.setBizPoIn(resources);
-            detail.copy(detail);  //使其给到类序列化对象
-            if (null == detail.getId() || detail.getId() <= 0) {
-                bizPoInDetailService.create(detail);
-            } else {
-                bizPoInDetailService.update(detail);
-            }
-            //  bizPoInDetailRepository.save(detail);
-
+        if (bizPoIn.getVersion() != resources.getVersion()) {
+            throw new BadRequestException("该记录已经被他人修改!");
         }
-        bizPoInRepository.save(bizPoIn);
+        resources.setVersion(resources.getVersion() == null ? 0 : resources.getVersion() + 1);
+        Map<String, List<BizPoInDetail>> resultMap = getPrepareData(bizPoIn, resources);
 
+        bizPoInDetailService.update(resultMap.get("ADD"));
+        bizPoInDetailService.update(resultMap.get("UPD"));
+        bizPoInDetailService.update(resultMap.get("DEL"));
+
+        bizPoInRepository.save(bizPoIn);
+    }
+
+    public Map<String,List<BizPoInDetail> > getPrepareData(BizPoIn oldContent,BizPoIn newContent){
+        Map<String,List<BizPoInDetail>> dataCollect = new HashMap<>(3);
+        dataCollect.put("ADD",new ArrayList<>());
+        dataCollect.put("DEL",new ArrayList<>());
+        dataCollect.put("UPD",new ArrayList<>());
+        Map<Long,BizPoInDetail> newContentIds = new HashMap<>();
+        //001:寻找新增记录:
+        for (BizPoInDetail bizPoInDetail : newContent.getBizPoInDetails()){
+            bizPoInDetail.setBizPoIn(newContent); //这样关联头表
+            if (null == bizPoInDetail.getId() ||  bizPoInDetail.getId() < 0 ) {
+                bizPoInDetail.setVersion(0);
+                bizPoInDetail.setTopCompanyCode(oldContent.getTopCompanyCode());
+                dataCollect.get("ADD").add(bizPoInDetail);
+            }
+            else {
+                newContentIds.put(bizPoInDetail.getId(),bizPoInDetail) ;
+            }
+        }
+        //002:第二步根据现有DB数据筛选DEL,UPD
+        for (BizPoInDetail bizPoInDetail : oldContent.getBizPoInDetails()){
+            bizPoInDetail.setBizPoIn(newContent); //这样关联头表
+            if (newContentIds.containsKey(bizPoInDetail.getId()))
+            {
+                BizPoInDetail _update = newContentIds.get(bizPoInDetail.getId());  //用于判断是否更新
+                if (!_update.toString().equalsIgnoreCase(bizPoInDetail.toString()))
+                {
+                    _update.setVersion(_update.getVersion()==null?0:_update.getVersion() + 1);
+                    dataCollect.get("UPD").add(_update);
+                }
+            }else {
+                bizPoInDetail.setIsDelete(true);
+                bizPoInDetail.setVersion(bizPoInDetail.getVersion()==null?0:bizPoInDetail.getVersion() + 1);
+                dataCollect.get("DEL").add(bizPoInDetail);
+            }
+        }
+        return  dataCollect;
     }
 
     @Override
     //@CacheEvict(allEntries = true)
     public void deleteAll(Long[] ids) {
-        for (Long id : ids) {
-            bizPoInRepository.deleteById(id);
+
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteAll(Set<BizPoInDto> bizPoInDtos){
+        for(BizPoInDto  bizPoinDto : bizPoInDtos){
+            Optional<BizPoIn> bizPoIn = bizPoInRepository.findById(bizPoinDto.getId());
+            bizPoInDetailService.deleteAllByHeadId(bizPoIn.get().getId());
+            bizPoIn.ifPresent(o->{
+                bizPoIn.get().setIsDelete(true);
+                bizPoIn.get().setVersion(bizPoIn.get().getVersion()==null?0:bizPoIn.get().getVersion() + 1);
+                bizPoInRepository.save(bizPoIn.get());
+            });
         }
     }
 

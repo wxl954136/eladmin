@@ -17,8 +17,13 @@ public enum  SysStatusEnum {
 
     BIZ_NOTE_TYPE_PO_PI("采购入库单","PI"),
 
+    //记录明细数据操作类型
+    NOTE_ACTION_ADD("明细新增","ADD"),
+    NOTE_ACTION_UPD("明细修改","UPD"),
+    NOTE_ACTION_DEL("明细删除","DEL"),
 
     CLOSED("交易关闭", "TRADE_CLOSED");
+
 
 
     private String value;

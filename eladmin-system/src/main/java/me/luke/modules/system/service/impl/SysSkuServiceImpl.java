@@ -23,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
@@ -68,20 +67,7 @@ public class SysSkuServiceImpl implements SysSkuService {
             return null;
         }
     }
-/*
-    @Override
-    public List<Assist> findAllByBrands(String topCompanyCode) {
 
-
-//        Query query = em.createNativeQuery(sql.toString());
-//        query.unwrap(SQLQuery.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
-
-        return sysSkuRepository.findAllByBrands(topCompanyCode);
-
-
-
-    }
-*/
     @Override
     @Cacheable
     public List<Assist> findAllByColor(String ... data) {

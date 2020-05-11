@@ -49,12 +49,23 @@ public interface BizPoInDetailService {
     * @param resources /
     */
     void update(BizPoInDetail resources);
-
+    /**
+     * 批量 编辑
+     * @param resourcesList /
+     */
+    void update(List<BizPoInDetail> resourcesList);
     /**
     * 多选删除
     * @param ids /
     */
     void deleteAll(Long[] ids);
+
+
+    /**
+     * 多选删除
+     * @param ids /
+     */
+    void deleteAllByHeadId(Long headId);
 
     /**
     * 导出数据

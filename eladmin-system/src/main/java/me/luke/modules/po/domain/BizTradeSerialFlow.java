@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import lombok.Data;
 import me.luke.base.BaseEntity;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -14,6 +15,7 @@ import java.math.BigDecimal;
 */
 @Entity
 @Data
+@Where(clause=" is_delete= 0  and 1=1 ")
 @Table(name="biz_trade_serial_flow")
 public class BizTradeSerialFlow extends BaseEntity {
 

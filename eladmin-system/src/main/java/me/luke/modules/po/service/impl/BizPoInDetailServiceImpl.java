@@ -71,8 +71,7 @@ public class BizPoInDetailServiceImpl implements BizPoInDetailService {
     //@CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public BizPoInDetailDto create(BizPoInDetail resources) {
-       // Snowflake snowflake = IdUtil.createSnowflake(1, 1);
-      //  resources.setId(snowflake.nextId());
+
         return bizPoInDetailMapper.toDto(bizPoInDetailRepository.save(resources));
     }
 
@@ -87,11 +86,24 @@ public class BizPoInDetailServiceImpl implements BizPoInDetailService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void update(List<BizPoInDetail> resourcesList) {
+        bizPoInDetailRepository.saveAll(resourcesList);
+
+    }
+
+    @Override
     //@CacheEvict(allEntries = true)
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
             bizPoInDetailRepository.deleteById(id);
         }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteAllByHeadId(Long headId) {
+        bizPoInDetailRepository.deleteAllByHeadId(headId);
     }
 
     @Override
