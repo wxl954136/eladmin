@@ -2,9 +2,9 @@ package me.luke.modules.system.service.impl;
 
 import me.luke.modules.system.domain.DictDetail;
 import me.luke.modules.system.service.dto.DictDetailQueryCriteria;
-import me.luke.utils.PageUtil;
-import me.luke.utils.QueryHelp;
-import me.luke.utils.ValidationUtil;
+import me.luke.modules.utils.PageUtil;
+import me.luke.modules.utils.QueryHelp;
+import me.luke.modules.utils.ValidationUtil;
 import me.luke.modules.system.repository.DictDetailRepository;
 import me.luke.modules.system.service.DictDetailService;
 import me.luke.modules.system.service.dto.DictDetailDto;

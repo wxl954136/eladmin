@@ -1,6 +1,6 @@
 package me.luke.config;
 
-import me.luke.utils.SecurityUtils;
+import me.luke.modules.utils.SecurityUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import java.util.Arrays;

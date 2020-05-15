@@ -1,7 +1,5 @@
 package me.luke.modules.system.rest;
 
-import com.alibaba.fastjson.JSONArray;
-import io.lettuce.core.ScriptOutputType;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import me.luke.aop.log.Log;
@@ -9,21 +7,18 @@ import me.luke.config.DataScope;
 import me.luke.modules.security.security.vo.JwtUser;
 import me.luke.modules.system.domain.vo.Assist;
 import me.luke.modules.system.domain.SysSku;
-import me.luke.modules.system.repository.SysSkuRepository;
 import me.luke.modules.system.service.SysSkuClassifyService;
 import me.luke.modules.system.service.SysSkuService;
 import me.luke.modules.system.service.dto.SysSkuDto;
 import me.luke.modules.system.service.dto.SysSkuQueryCriteria;
-import me.luke.utils.CastEntity;
-import me.luke.utils.RedisUtils;
-import me.luke.utils.StringUtils;
-import me.luke.utils.UserUtil;
+import me.luke.modules.utils.RedisUtils;
+import me.luke.modules.utils.StringUtils;
+import me.luke.modules.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +26,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.util.*;
 
 /**

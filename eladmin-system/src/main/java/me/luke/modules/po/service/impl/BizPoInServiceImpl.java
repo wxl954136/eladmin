@@ -4,6 +4,7 @@ import cn.hutool.core.util.IdUtil;
 import me.luke.exception.BadRequestException;
 import me.luke.modules.po.domain.BizPoIn;
 import me.luke.modules.po.domain.BizPoInDetail;
+import me.luke.modules.po.domain.BizTradeSerialFlow;
 import me.luke.modules.po.repository.BizPoInDetailRepository;
 import me.luke.modules.po.repository.BizPoInRepository;
 import me.luke.modules.po.service.BizPoInDetailService;
@@ -12,9 +13,11 @@ import me.luke.modules.po.service.BizTradeSerialFlowService;
 import me.luke.modules.po.service.dto.BizPoInDto;
 import me.luke.modules.po.service.dto.BizPoInQueryCriteria;
 import me.luke.modules.po.service.mapper.BizPoInMapper;
-import me.luke.utils.*;
+import me.luke.modules.utils.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -40,6 +43,8 @@ import java.util.*;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class BizPoInServiceImpl implements BizPoInService {
     private static final Logger logger = LoggerFactory.getLogger(BizPoInServiceImpl.class);
+    @Autowired
+    private RedisUtils redisUtils;
     private BizPoInRepository bizPoInRepository;
     private final BizPoInDetailRepository bizPoInDetailRepository;
     private final BizPoInDetailService bizPoInDetailService;
@@ -97,17 +102,45 @@ public class BizPoInServiceImpl implements BizPoInService {
         } else {
             resources.setBizNo(bizNoPrefix + "-0001");  //单据编号
         }
-
         for (BizPoInDetail detail : resources.getBizPoInDetails()) {
-            detail.setKeywords(IdUtil.simpleUUID());
+            if (StringUtils.isEmpty(detail.getKeywords())) detail.setKeywords(IdUtil.simpleUUID());
             //lukeWang:本例做为范例，每个程序都防此无论前端是否给值
             detail.setVersion(0);
             detail.setTopCompanyCode(resources.getTopCompanyCode());
             detail.setBizPoIn(resources);
+            if (null!=detail.getBizTradeSerialFlow()  && detail.getBizTradeSerialFlow().size() > 0)
+            {
+                detail.setBizTradeSerialFlow(getMadeBizTradeSerialFlowList(resources,detail,detail.getBizTradeSerialFlow()));
+                bizTradeSerialFlowService.update(detail.getBizTradeSerialFlow());
+            }
         }
+
+      //lukeWang: 这里处理
         return bizPoInMapper.toDto(bizPoInRepository.save(resources));
     }
 
+
+    //处理串号里面的数据
+    public List<BizTradeSerialFlow> getMadeBizTradeSerialFlowList(BizPoIn head, BizPoInDetail detail, List<BizTradeSerialFlow> serialList){
+        List<BizTradeSerialFlow> resultList = new ArrayList<>();
+        for(BizTradeSerialFlow bizTradeSerialFlow : serialList)
+        {
+            bizTradeSerialFlow.setTopCompanyCode(head.getTopCompanyCode());
+            bizTradeSerialFlow.setBizHeadKeywords(head.getKeywords());
+            bizTradeSerialFlow.setBizDetailKeywords(detail.getKeywords());
+            bizTradeSerialFlow.setBizDate(head.getBizDate());
+            bizTradeSerialFlow.setBizType(head.getBizType());
+            bizTradeSerialFlow.setTraderId(head.getSysTrader().getId());
+            bizTradeSerialFlow.setStoreId(head.getSysStore().getId());
+            bizTradeSerialFlow.setSkuId(detail.getSysSku().getId());
+            //serial01/serial02/serial03使用自己的，不动
+            bizTradeSerialFlow.setQty(detail.getQty());
+            bizTradeSerialFlow.setPrice(detail.getPrice());
+            bizTradeSerialFlow.setRate(detail.getRate());
+            resultList.add(bizTradeSerialFlow);
+        }
+        return resultList;
+    }
     @Override
     //@CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
@@ -128,6 +161,7 @@ public class BizPoInServiceImpl implements BizPoInService {
     }
 
     public Map<String,List<BizPoInDetail> > getPrepareData(BizPoIn oldContent,BizPoIn newContent){
+
         Map<String,List<BizPoInDetail>> dataCollect = new HashMap<>(3);
         dataCollect.put("ADD",new ArrayList<>());
         dataCollect.put("DEL",new ArrayList<>());
@@ -142,6 +176,11 @@ public class BizPoInServiceImpl implements BizPoInService {
                 dataCollect.get("ADD").add(bizPoInDetail);
             }
             else {
+                if (null != bizPoInDetail.getBizTradeSerialFlow() )
+                {
+                    System.out.println("lukeWang--这里处理串并整理号-------" + bizPoInDetail.getBizTradeSerialFlow().size());
+
+                }
                 newContentIds.put(bizPoInDetail.getId(),bizPoInDetail) ;
             }
         }

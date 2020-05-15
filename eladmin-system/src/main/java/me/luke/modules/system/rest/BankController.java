@@ -10,7 +10,7 @@ import me.luke.exception.BadRequestException;
 import me.luke.modules.system.domain.Bank;
 import me.luke.modules.system.service.BankService;
 import me.luke.modules.system.service.dto.BankQueryCriteria;
-import me.luke.utils.ThrowableUtil;
+import me.luke.modules.utils.ThrowableUtil;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

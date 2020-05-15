@@ -6,10 +6,10 @@ import me.luke.modules.po.service.BizTradeSerialFlowService;
 import me.luke.modules.po.service.dto.BizTradeSerialFlowDto;
 import me.luke.modules.po.service.dto.BizTradeSerialFlowQueryCriteria;
 import me.luke.modules.po.service.mapper.BizTradeSerialFlowMapper;
-import me.luke.utils.FileUtil;
-import me.luke.utils.PageUtil;
-import me.luke.utils.QueryHelp;
-import me.luke.utils.ValidationUtil;
+import me.luke.modules.utils.FileUtil;
+import me.luke.modules.utils.PageUtil;
+import me.luke.modules.utils.QueryHelp;
+import me.luke.modules.utils.ValidationUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -91,6 +91,12 @@ public class BizTradeSerialFlowServiceImpl implements BizTradeSerialFlowService 
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void update(List<BizTradeSerialFlow> resourcesList) {
+        bizTradeSerialFlowRepository.saveAll(resourcesList);
+    }
+
+    @Override
     //@CacheEvict(allEntries = true)
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
@@ -104,8 +110,6 @@ public class BizTradeSerialFlowServiceImpl implements BizTradeSerialFlowService 
         for (BizTradeSerialFlowDto bizTradeSerialFlow : all) {
             Map<String,Object> map = new LinkedHashMap<>();
             map.put("uuid", bizTradeSerialFlow.getKeywords());
-
-
             map.put("业务单据日期", bizTradeSerialFlow.getBizDate());
             map.put("单据类型", bizTradeSerialFlow.getBizType());
             map.put("往来单位id", bizTradeSerialFlow.getTraderId());

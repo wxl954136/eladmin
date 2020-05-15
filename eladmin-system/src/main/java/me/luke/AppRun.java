@@ -1,7 +1,7 @@
 package me.luke;
 
 import me.luke.annotation.AnonymousAccess;
-import me.luke.utils.SpringContextHolder;
+import me.luke.modules.utils.SpringContextHolder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;

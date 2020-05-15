@@ -7,7 +7,7 @@ import me.luke.domain.vo.EmailVo;
 import me.luke.exception.BadRequestException;
 import me.luke.repository.EmailRepository;
 import me.luke.service.EmailService;
-import me.luke.utils.EncryptUtils;
+import me.luke.modules.utils.EncryptUtils;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;

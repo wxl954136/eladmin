@@ -3,7 +3,7 @@ package me.luke.service.impl;
 import me.luke.domain.GenConfig;
 import me.luke.repository.GenConfigRepository;
 import me.luke.service.GenConfigService;
-import me.luke.utils.StringUtils;
+import me.luke.modules.utils.StringUtils;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;

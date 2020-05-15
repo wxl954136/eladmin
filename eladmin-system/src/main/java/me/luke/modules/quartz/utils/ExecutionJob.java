@@ -1,13 +1,12 @@
 package me.luke.modules.quartz.utils;
 
-import me.luke.config.thread.TheadFactoryName;
 import me.luke.config.thread.ThreadPoolExecutorUtil;
 import me.luke.modules.quartz.domain.QuartzJob;
 import me.luke.modules.quartz.domain.QuartzLog;
 import me.luke.modules.quartz.repository.QuartzLogRepository;
 import me.luke.modules.quartz.service.QuartzJobService;
-import me.luke.utils.SpringContextHolder;
-import me.luke.utils.ThrowableUtil;
+import me.luke.modules.utils.SpringContextHolder;
+import me.luke.modules.utils.ThrowableUtil;
 import org.quartz.JobExecutionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

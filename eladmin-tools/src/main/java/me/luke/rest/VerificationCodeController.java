@@ -6,7 +6,7 @@ import me.luke.domain.VerificationCode;
 import me.luke.domain.vo.EmailVo;
 import me.luke.service.EmailService;
 import me.luke.service.VerificationCodeService;
-import me.luke.utils.ElAdminConstant;
+import me.luke.modules.utils.ElAdminConstant;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

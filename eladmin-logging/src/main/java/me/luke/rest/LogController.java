@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import me.luke.aop.log.Log;
 import me.luke.service.LogService;
 import me.luke.service.dto.LogQueryCriteria;
-import me.luke.utils.SecurityUtils;
+import me.luke.modules.utils.SecurityUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

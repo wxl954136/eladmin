@@ -3,7 +3,7 @@ package me.luke.modules.monitor.rest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import me.luke.modules.monitor.service.VisitsService;
-import me.luke.utils.RequestHolder;
+import me.luke.modules.utils.RequestHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

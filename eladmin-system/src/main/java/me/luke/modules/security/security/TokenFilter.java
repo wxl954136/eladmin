@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.luke.modules.security.config.SecurityProperties;
 import me.luke.modules.security.security.vo.OnlineUser;
 import me.luke.modules.security.service.OnlineUserService;
-import me.luke.utils.SpringContextHolder;
+import me.luke.modules.utils.SpringContextHolder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;

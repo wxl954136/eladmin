@@ -1,6 +1,5 @@
 package me.luke.modules.system.rest;
 
-import cn.hutool.core.util.IdUtil;
 import me.luke.aop.log.Log;
 import me.luke.config.DataScope;
 import me.luke.modules.security.security.vo.JwtUser;
@@ -9,11 +8,10 @@ import me.luke.modules.system.service.DeptService;
 import me.luke.modules.system.service.SysStoreService;
 import me.luke.modules.system.service.dto.SysStoreDto;
 import me.luke.modules.system.service.dto.SysStoreQueryCriteria;
-import me.luke.utils.PageUtil;
-import me.luke.utils.RedisUtils;
-import me.luke.utils.StringUtils;
-import me.luke.utils.UserUtil;
-import org.apache.poi.ss.formula.functions.T;
+import me.luke.modules.utils.PageUtil;
+import me.luke.modules.utils.RedisUtils;
+import me.luke.modules.utils.StringUtils;
+import me.luke.modules.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;

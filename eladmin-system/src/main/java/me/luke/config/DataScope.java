@@ -8,7 +8,7 @@ import me.luke.modules.system.service.SysSkuClassifyService;
 import me.luke.modules.system.service.UserService;
 import me.luke.modules.system.service.dto.RoleSmallDto;
 import me.luke.modules.system.service.dto.UserDto;
-import me.luke.utils.SecurityUtils;
+import me.luke.modules.utils.SecurityUtils;
 import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.HashSet;

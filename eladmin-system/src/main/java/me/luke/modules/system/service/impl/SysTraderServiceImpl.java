@@ -1,10 +1,9 @@
 package me.luke.modules.system.service.impl;
 
 import me.luke.exception.BadRequestException;
-import me.luke.modules.system.domain.SysStore;
 import me.luke.modules.system.domain.SysTrader;
-import me.luke.utils.ValidationUtil;
-import me.luke.utils.FileUtil;
+import me.luke.modules.utils.ValidationUtil;
+import me.luke.modules.utils.FileUtil;
 import me.luke.modules.system.repository.SysTraderRepository;
 import me.luke.modules.system.service.SysTraderService;
 import me.luke.modules.system.service.dto.SysTraderDto;
@@ -22,8 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 //import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import me.luke.utils.PageUtil;
-import me.luke.utils.QueryHelp;
+import me.luke.modules.utils.PageUtil;
+import me.luke.modules.utils.QueryHelp;
 
 import java.util.*;
 import java.io.IOException;

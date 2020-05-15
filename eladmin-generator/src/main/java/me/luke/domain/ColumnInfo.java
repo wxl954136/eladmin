@@ -2,7 +2,7 @@ package me.luke.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import me.luke.utils.GenUtil;
+import me.luke.modules.utils.GenUtil;
 import javax.persistence.*;
 
 /**

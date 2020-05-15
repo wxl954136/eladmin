@@ -7,7 +7,7 @@ import lombok.ToString;
 import me.luke.base.BaseEntity;
 import me.luke.modules.system.domain.SysStore;
 import me.luke.modules.system.domain.SysTrader;
-import me.luke.utils.SysStatusEnum;
+import me.luke.modules.utils.SysStatusEnum;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;

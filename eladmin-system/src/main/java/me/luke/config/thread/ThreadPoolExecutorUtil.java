@@ -1,6 +1,6 @@
 package me.luke.config.thread;
 
-import me.luke.utils.SpringContextHolder;
+import me.luke.modules.utils.SpringContextHolder;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;

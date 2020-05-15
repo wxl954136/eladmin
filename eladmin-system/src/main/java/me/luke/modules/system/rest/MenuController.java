@@ -11,7 +11,7 @@ import me.luke.modules.system.service.UserService;
 import me.luke.modules.system.service.dto.MenuDto;
 import me.luke.modules.system.service.dto.MenuQueryCriteria;
 import me.luke.modules.system.service.dto.UserDto;
-import me.luke.utils.SecurityUtils;
+import me.luke.modules.utils.SecurityUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

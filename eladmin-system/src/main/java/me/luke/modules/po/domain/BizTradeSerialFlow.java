@@ -87,4 +87,25 @@ public class BizTradeSerialFlow extends BaseEntity {
     public void copy(BizTradeSerialFlow source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }
+
+
+
+    @Override
+    public String toString() {
+
+        return "BizTradeSerialFlow [" +
+                "id=" + id + ", " +
+                "keywords=" + keywords +  ", " +
+                "bizHeadKeywords=" + bizHeadKeywords +  ", " +
+                "bizDetailKeywords=" + bizDetailKeywords +  ", " +
+                "bizDetailKeywords=" + bizDetailKeywords +  ", " +
+                "storeId=" + storeId +  ", " +
+                "skuId=" + skuId +  ", " +
+                "serial01=" + serial01 +  ", " +
+                "serial02=" + serial02 +  ", " +
+                "serial03=" + serial03 +  ", " +
+                "qty=" + Double.parseDouble(qty.toString())   + ", " +
+                "price=" + Double.parseDouble(price.toString())  +
+                "]";
+    }
 }

@@ -9,10 +9,10 @@ import me.luke.modules.system.service.BankService;
 import me.luke.modules.system.service.dto.BankDto;
 import me.luke.modules.system.service.dto.BankQueryCriteria;
 import me.luke.modules.system.service.mapper.BankMapper;
-import me.luke.utils.FileUtil;
-import me.luke.utils.PageUtil;
-import me.luke.utils.QueryHelp;
-import me.luke.utils.ValidationUtil;
+import me.luke.modules.utils.FileUtil;
+import me.luke.modules.utils.PageUtil;
+import me.luke.modules.utils.QueryHelp;
+import me.luke.modules.utils.ValidationUtil;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -23,7 +23,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Validation;
 import java.io.IOException;
 import java.util.*;
 

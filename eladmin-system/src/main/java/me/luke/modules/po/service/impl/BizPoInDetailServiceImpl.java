@@ -1,8 +1,8 @@
 package me.luke.modules.po.service.impl;
 
 import me.luke.modules.po.domain.BizPoInDetail;
-import me.luke.utils.ValidationUtil;
-import me.luke.utils.FileUtil;
+import me.luke.modules.utils.ValidationUtil;
+import me.luke.modules.utils.FileUtil;
 import me.luke.modules.po.repository.BizPoInDetailRepository;
 import me.luke.modules.po.service.BizPoInDetailService;
 import me.luke.modules.po.service.dto.BizPoInDetailDto;
@@ -11,16 +11,14 @@ import me.luke.modules.po.service.mapper.BizPoInDetailMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import cn.hutool.core.lang.Snowflake;
-import cn.hutool.core.util.IdUtil;
 // 默认不使用缓存
 //import org.springframework.cache.annotation.CacheConfig;
 //import org.springframework.cache.annotation.CacheEvict;
 //import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import me.luke.utils.PageUtil;
-import me.luke.utils.QueryHelp;
+import me.luke.modules.utils.PageUtil;
+import me.luke.modules.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
 import java.io.IOException;
@@ -89,7 +87,6 @@ public class BizPoInDetailServiceImpl implements BizPoInDetailService {
     @Transactional(rollbackFor = Exception.class)
     public void update(List<BizPoInDetail> resourcesList) {
         bizPoInDetailRepository.saveAll(resourcesList);
-
     }
 
     @Override
@@ -115,12 +112,6 @@ public class BizPoInDetailServiceImpl implements BizPoInDetailService {
             map.put("数量", bizPoInDetail.getQty());
             map.put("采购价", bizPoInDetail.getPrice());
             map.put("税率", bizPoInDetail.getRate());
-            map.put("备注", bizPoInDetail.getRemark());
-            map.put("删除标记", bizPoInDetail.getIsDelete());
-            map.put("版本号", bizPoInDetail.getVersion());
-            map.put("修改日期", bizPoInDetail.getUpdateTime());
-            map.put("创建日期", bizPoInDetail.getCreateTime());
-            map.put("企业代码", bizPoInDetail.getTopCompanyCode());
 
             list.add(map);
         }

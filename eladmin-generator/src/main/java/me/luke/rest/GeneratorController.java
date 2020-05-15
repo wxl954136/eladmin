@@ -6,7 +6,7 @@ import me.luke.domain.ColumnInfo;
 import me.luke.exception.BadRequestException;
 import me.luke.service.GenConfigService;
 import me.luke.service.GeneratorService;
-import me.luke.utils.PageUtil;
+import me.luke.modules.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

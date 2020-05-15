@@ -5,7 +5,7 @@ import me.luke.modules.monitor.domain.Visits;
 import me.luke.modules.monitor.repository.VisitsRepository;
 import me.luke.modules.monitor.service.VisitsService;
 import me.luke.repository.LogRepository;
-import me.luke.utils.StringUtils;
+import me.luke.modules.utils.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;

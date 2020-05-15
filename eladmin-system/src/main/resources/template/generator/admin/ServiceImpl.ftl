@@ -10,8 +10,8 @@ import me.luke.exception.EntityExistException;
         </#if>
     </#list>
 </#if>
-import me.luke.utils.ValidationUtil;
-import me.luke.utils.FileUtil;
+import ValidationUtil;
+import FileUtil;
 import ${package}.repository.${className}Repository;
 import ${package}.service.${className}Service;
 import ${package}.service.dto.${className}Dto;
@@ -33,8 +33,8 @@ import cn.hutool.core.util.IdUtil;
 //import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import me.luke.utils.PageUtil;
-import me.luke.utils.QueryHelp;
+import PageUtil;
+import QueryHelp;
 import java.util.List;
 import java.util.Map;
 import java.io.IOException;

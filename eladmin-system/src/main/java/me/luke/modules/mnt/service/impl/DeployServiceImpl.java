@@ -19,7 +19,7 @@ import me.luke.modules.mnt.util.ScpClientUtil;
 import me.luke.modules.mnt.websocket.MsgType;
 import me.luke.modules.mnt.websocket.SocketMsg;
 import me.luke.modules.mnt.websocket.WebSocketServer;
-import me.luke.utils.*;
+import me.luke.modules.utils.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

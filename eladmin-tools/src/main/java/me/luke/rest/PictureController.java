@@ -6,7 +6,7 @@ import me.luke.aop.log.Log;
 import me.luke.domain.Picture;
 import me.luke.service.PictureService;
 import me.luke.service.dto.PictureQueryCriteria;
-import me.luke.utils.SecurityUtils;
+import me.luke.modules.utils.SecurityUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

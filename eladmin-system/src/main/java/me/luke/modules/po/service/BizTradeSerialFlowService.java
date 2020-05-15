@@ -61,6 +61,13 @@ public interface BizTradeSerialFlowService {
     void update(BizTradeSerialFlow resources);
 
     /**
+     * 批量 编辑 删除
+     * @param resourcesList /
+     */
+    void update(List<BizTradeSerialFlow> resourcesList);
+
+
+    /**
     * 多选删除
     * @param ids /
     */

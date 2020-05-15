@@ -15,9 +15,9 @@ import me.luke.modules.security.security.TokenProvider;
 import me.luke.modules.security.security.vo.AuthUser;
 import me.luke.modules.security.security.vo.JwtUser;
 import me.luke.modules.security.service.OnlineUserService;
-import me.luke.utils.RedisUtils;
-import me.luke.utils.SecurityUtils;
-import me.luke.utils.StringUtils;
+import me.luke.modules.utils.RedisUtils;
+import me.luke.modules.utils.SecurityUtils;
+import me.luke.modules.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -65,6 +65,7 @@ public class AuthController {
         this.onlineUserService = onlineUserService;
         this.tokenProvider = tokenProvider;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
+
     }
 
     @Log("用户登录")
